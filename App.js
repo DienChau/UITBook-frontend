@@ -28,7 +28,7 @@ export default function App() {
     <NativeBaseProvider>
       <NavigationContainer independent={true}>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="Welcom" component={WelcomeSreen} />
+          {/* <Stack.Screen name="Welcom" component={WelcomeSreen} /> */}
           <Stack.Screen name="LogIn" component={LogIn} />
           <Stack.Screen name="SignUp" component={SignUpScreen} />
         </Stack.Navigator>
