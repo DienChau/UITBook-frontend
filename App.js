@@ -1,6 +1,8 @@
+import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { StatusBar } from "expo-status-bar";
+import axios from "axios";
 
 import { StyleSheet, Text, View } from "react-native";
 import Home from "./src/screen/Home";
@@ -9,25 +11,43 @@ import { NativeBaseProvider } from "native-base";
 import SignIn from "./src/components/SignIn";
 import SignUpScreen from "./src/screen/SignUpScreen";
 import WelcomeSreen from "./src/screen/WelcomeSreen";
+import BookDetail from "./src/components/BookDetail";
+
+// const baseUrl = "http://192.168.0.108:5000";
+
+import TabBottom from "./src/components/TabBottom";
 
 const Stack = createStackNavigator();
 export default function App() {
-  console.log("Hi");
-  const getMoviesFromApiAsync = async () => {
-    try {
-      const response = await fetch("https://reactnative.dev/movies.json");
-      const json = await response.json();
-      console.log("API:", json.movies);
-      return json.movies;
-    } catch (error) {
-      console.error(error);
-    }
-  };
-  getMoviesFromApiAsync();
+  // React.useEffect(() => {
+  //   async function fetchData() {
+  //     try {
+  //       const request = await axios.get(`${baseUrl}/api/v2/books`);
+  //       console.log(request.data);
+  //     } catch (error) {
+  //       console.log("error");
+  //     }
+  //   }
+  //   fetchData();
+  // }, []);
+  // console.log("Hi");
+  // const getMoviesFromApiAsync = async () => {
+  //   try {
+  //     const response = await fetch("https://reactnative.dev/movies.json");
+  //     const json = await response.json();
+  //     console.log("API:", json.movies);
+  //     return json.movies;
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
+  // getMoviesFromApiAsync();
   return (
     <NativeBaseProvider>
       <NavigationContainer independent={true}>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="TabBottom" component={TabBottom} />
+          <Stack.Screen name="BookDetail" component={BookDetail} />
           <Stack.Screen name="Welcom" component={WelcomeSreen} />
           <Stack.Screen name="LogIn" component={LogIn} />
           <Stack.Screen name="SignUp" component={SignUpScreen} />
