@@ -16,7 +16,7 @@ import { AntDesign } from "@expo/vector-icons";
 import { useValidation } from "react-native-form-validator";
 import { Foundation } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { ImageBackground } from "react-native";
+import { ImageBackground, Keyboard, ToastAndroid } from "react-native";
 import bgLogIn from "../../assets/bgLogIn2.png";
 import { useNavigation } from "@react-navigation/native";
 
@@ -29,6 +29,12 @@ const SignIn = () => {
     useValidation({
       state: { name, newPassword },
     });
+  const handlePress = () => {
+    Keyboard.dismiss();
+    if (name === "" || password === "") {
+      ToastAndroid.show("Vui lòng nhập đầy đủ thông tin", ToastAndroid.SHORT);
+    }
+  };
 
   const _onPressButton = () => {
     console.log("name:", name);
@@ -56,7 +62,7 @@ const SignIn = () => {
             <Text
               style={{
                 textAlign: "center",
-                fontSize: 18,
+                fontSize: 20,
                 fontWeight: "800",
                 color: "#fff",
               }}
@@ -67,7 +73,7 @@ const SignIn = () => {
               <FormControl.Label
                 _text={{
                   color: "#fff",
-                  fontSize: 14,
+                  fontSize: 15,
                   marginTop: 3,
                 }}
               >
@@ -94,16 +100,12 @@ const SignIn = () => {
                 }
                 placeholder="Name"
               />
-
-              <FormControl.ErrorMessage>
-                {isFieldInError("name") && <Text>Is required</Text>}
-              </FormControl.ErrorMessage>
             </FormControl>
             <FormControl isInvalid>
               <FormControl.Label
                 _text={{
                   color: "#fff",
-                  fontSize: 14,
+                  fontSize: 15,
                 }}
               >
                 Mật khẩu
@@ -142,17 +144,15 @@ const SignIn = () => {
                 }
                 placeholder="Password"
               />
-              <FormControl.ErrorMessage>
-                {isFieldInError("newPassword") && <Text>Is required</Text>}
-              </FormControl.ErrorMessage>
+
               <Pressable onPress={handleToSignUp}>
-                <Text style={{ color: "#fff", fontSize: 10 }}>
+                <Text style={{ color: "#fff", fontSize: 14 }}>
                   Chưa có tài khoản ?
                 </Text>
               </Pressable>
               <Button
                 style={{ marginTop: 10 }}
-                onPress={_onPressButton}
+                onPress={handlePress}
                 size="sm"
                 bg="#E8ABC3"
                 _text={{ fontSize: 18, fontWeight: "900" }}
