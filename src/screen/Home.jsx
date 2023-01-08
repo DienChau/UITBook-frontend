@@ -1,11 +1,15 @@
 import React from "react";
 import { Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import ItemProduct from "../components/ItemProduct";
 
 const Home = () => {
   return (
-    <View>
-      <Text>This is home</Text>
-    </View>
+    <SafeAreaView>
+      <View>
+        <ItemProduct />
+      </View>
+    </SafeAreaView>
   );
 };
 

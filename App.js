@@ -6,19 +6,23 @@ import { StyleSheet, Text, View } from "react-native";
 import Home from "./src/screen/Home";
 import LogIn from "./src/screen/LogIn";
 import { NativeBaseProvider } from "native-base";
-import SignIn from "./src/components/SignIn";
 import SignUpScreen from "./src/screen/SignUpScreen";
 import WelcomeSreen from "./src/screen/WelcomeSreen";
+import Books from "./src/components/Books";
+import BooksScreen from "./src/screen/BooksScreen";
 
 const Stack = createStackNavigator();
+
 export default function App() {
   console.log("Hi");
   const getMoviesFromApiAsync = async () => {
     try {
-      const response = await fetch("https://reactnative.dev/movies.json");
+      const response = await fetch(
+        "http://192.168.1.4:5000/api/v2/books/popular"
+      );
       const json = await response.json();
-      console.log("API:", json.movies);
-      return json.movies;
+      console.log("API: ", json);
+      return json;
     } catch (error) {
       console.error(error);
     }

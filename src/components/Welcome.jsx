@@ -3,8 +3,16 @@ import { View, Text } from "react-native";
 import { Box, Button, Image } from "native-base";
 import logo from "../../assets/logo.png";
 import welcom from "../../assets/Welcome3.png";
+import { useNavigation } from "@react-navigation/native";
 
 const Welcome = () => {
+  const navigation = useNavigation();
+  const handleToSignIn = () => {
+    navigation.navigate("SignUp");
+  };
+  const handleToSignUp = () => {
+    navigation.navigate("LogIn");
+  };
   return (
     <View
       style={{
@@ -31,17 +39,33 @@ const Welcome = () => {
         <Image source={logo} />
       </Box>
       <Box width="90%" flex={1}>
-        <Image
-          source={welcom}
-          marginTop={10}
-          style={{ width: 250, resizeMode: "stretch", height: 100 }}
-        />
-        <View style={{ marginTop: 20 }}>
-          <Button size="lg" _text={{ fontWeight: 900, fontSize: 18 }}>
+        <View style={{ alignItems: "center" }}>
+          <Image
+            source={welcom}
+            marginTop={10}
+            style={{ width: 250, resizeMode: "stretch", height: 100 }}
+          />
+        </View>
+
+        <View
+          style={{
+            marginTop: 30,
+            position: "absolute",
+            bottom: 20,
+            width: "100%",
+          }}
+        >
+          <Button
+            onPress={handleToSignIn}
+            size="lg"
+            bg="#E8ABC3"
+            _text={{ fontWeight: 900, fontSize: 18 }}
+          >
             ĐĂNG KÝ
           </Button>
           <Button
-            w="100%"
+            onPress={handleToSignUp}
+            bg="#49D9E2"
             style={{ marginTop: 20 }}
             size="lg"
             _text={{ fontWeight: 900, fontSize: 18 }}
