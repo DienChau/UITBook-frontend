@@ -21,20 +21,20 @@ import TabBottom from "./src/components/TabBottom";
 const Stack = createStackNavigator();
 
 export default function App() {
-  console.log("Hi");
-  const getMoviesFromApiAsync = async () => {
-    try {
-      const response = await fetch(
-        "http://192.168.1.4:5000/api/v2/books/popular"
-      );
-      const json = await response.json();
-      console.log("API: ", json);
-      return json;
-    } catch (error) {
-      console.error(error);
-    }
-  };
-  getMoviesFromApiAsync();
+  // console.log("Hi");
+  // const getMoviesFromApiAsync = async () => {
+  //   try {
+  //     const response = await fetch(
+  //       "http://192.168.1.4:5000/api/v2/books/popular"
+  //     );
+  //     const json = await response.json();
+  //     console.log("API: ", json);
+  //     return json;
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
+  // getMoviesFromApiAsync();
   // React.useEffect(() => {
   //   async function fetchData() {
   //     try {

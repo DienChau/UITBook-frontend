@@ -12,6 +12,7 @@ import {
   LogBox,
   TouchableOpacity,
 } from "react-native";
+import Header from "../components/Header";
 import { MaterialIcons } from "@expo/vector-icons";
 import { NumericFormat } from "react-number-format";
 import { AntDesign } from "@expo/vector-icons";
@@ -29,6 +30,7 @@ const Favorites = () => {
       }}
     >
       <Text>This is Favorites</Text>
+      <Header />
       <Image
         style={{
           width: "100%",

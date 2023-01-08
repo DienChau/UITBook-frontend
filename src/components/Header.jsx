@@ -10,7 +10,7 @@ const Header = () => {
     <View style={{ backgroundColor: "#CBF0F8", flexDirection: "row" }}>
       <View flex={1} justifyContent="center" alignItems="center">
         <Image
-          source={logo}
+          source={require('../../assets/logo.png')}
           style={{ width: 50, height: 50, resizeMode: "stretch" }}
         ></Image>
       </View>

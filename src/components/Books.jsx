@@ -18,6 +18,7 @@ import Header from "./Header";
 import { Ionicons } from "@expo/vector-icons";
 import Checkbox from "expo-checkbox";
 import { MaterialIcons } from "@expo/vector-icons";
+import Book from "./Book";
 
 const Books = () => {
   const { isOpen, onOpen, onClose } = useDisclose();
@@ -136,8 +137,12 @@ const Books = () => {
           bg: "#fff",
         }}
       />
+      <View style={{ paddingHorizontal: 20, flexDirection: 'row' }}>
+        <Book />
+        <Book />
+      </View>
 
-      <FlatList renderItem={() => <Text>HHH</Text>}></FlatList>
+      {/* <FlatList renderItem={() => <Text>HHH</Text>}></FlatList> */}
 
       <Actionsheet isOpen={isOpen} onClose={onClose}>
         <Actionsheet.Content>
