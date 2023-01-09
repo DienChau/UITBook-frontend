@@ -34,17 +34,17 @@ function Listbook(props) {
     // console.log('http://192.168.0.108:5000/api/v2/book/' + listBook[1].name);
     // // BookViewed(1)
     // console.log("Heelo");
-    React.useEffect(() => {
-        async function fetchData() {
-            try {
-                const request = await axios.get(`${baseUrl}/api/v2/books/popular`);
-                console.log(request.data.books);
-            } catch (error) {
-                console.log("error");
-            }
-        }
-        fetchData();
-    }, []);
+    // React.useEffect(() => {
+    //     async function fetchData() {
+    //         try {
+    //             const request = await axios.get(`${baseUrl}/api/v2/books/popular`);
+    //             console.log(request.data.books);
+    //         } catch (error) {
+    //             console.log("error");
+    //         }
+    //     }
+    //     fetchData();
+    // }, []);
 
 
     return (

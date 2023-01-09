@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { StyleSheet } from "react-native";
+import { StyleSheet, SafeAreaView } from "react-native";
 import { MaterialIcons } from '@expo/vector-icons';
 import { SimpleLineIcons } from '@expo/vector-icons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -12,6 +12,7 @@ import Home from '../screen/Home';
 import Category from '../screen/Category'
 import Favorites from '../screen/Favorites'
 import Account from '../screen/Account'
+// import ProfileStackScreen from '../screen/ProfileStackScreen';
 
 import { useNavigation, useRoute } from '@react-navigation/native';
 
@@ -21,6 +22,7 @@ function TabBottom() {
     const route = useRoute();
 
     return (
+        // <SafeAreaView style={{ flex: 1 }}>
         <Tab.Navigator
             screenOptions={({ route }) => ({
                 tabBarIcon: ({ focused, size, color }) => {
@@ -110,7 +112,7 @@ function TabBottom() {
                 component={Account}
             />
         </Tab.Navigator>
-
+        // </SafeAreaView>
     )
 }
 const styles = StyleSheet.create({
