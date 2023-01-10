@@ -59,45 +59,29 @@ const Book = (props) => {
               height: (windowWidth - 70) / 3,
               width: (windowWidth - 70) / 3,
             }}
-        >
-            <TouchableOpacity
-                onPress={props.addFavoriteHandler}
-                style={{ position: "absolute", left: 10, top: 10, zIndex: 2 }}
-            >
-                <MaterialIcons name={"favorite-outline"} size={26} color={"#E8ABC3"} />
-            </TouchableOpacity>
-            <TouchableOpacity>
-                <View style={{ flexDirection: "row", justifyContent: "center" }}>
-                    <Image
-                        style={{
-                            height: 100,
-                            height: (windowWidth - 70) / 3,
-                            width: (windowWidth - 70) / 3,
-                        }}
-                        resizeMode="contain"
-                        source={require("../../assets/book1.png")}
-
-                    />
-                </View>
-                <View>
-                    <Text
-                        ellipsizeMode="tail"
-                        numberOfLines={2}
-                        style={{
-                            width: "100%",
-                            textAlign: "center",
-                            fontSize: 14,
-                            whiteSpace: "nowrap",
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                            lineHeight: 18,
-                            marginTop: 10,
-                        }}
-                    >
-                        Thiên Tài Bên Trái, Kẻ Điên Bên Phải (Tái Bản)
-                    </Text>
-                </View>
-            </TouchableOpacity>
+            resizeMode="contain"
+            source={require("../../assets/book1.png")}
+          />
+        </View>
+        <View>
+          <Text
+            ellipsizeMode="tail"
+            numberOfLines={2}
+            style={{
+              width: "100%",
+              textAlign: "center",
+              fontSize: 14,
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              lineHeight: 18,
+              marginTop: 10,
+            }}
+          >
+            Thiên Tài Bên Trái, Kẻ Điên Bên Phải (Tái Bản)
+          </Text>
+        </View>
+      </TouchableOpacity>
 
       <View style={{ alignItems: "center", marginTop: 6 }}>
         <NumericFormat
