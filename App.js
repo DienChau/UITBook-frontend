@@ -13,6 +13,7 @@ import WelcomeSreen from "./src/screen/WelcomeSreen";
 import BookDetail from "./src/components/BookDetail";
 import Books from "./src/components/Books";
 import BooksScreen from "./src/screen/BooksScreen";
+import OrderInforScreen from "./src/screen/OrderInforScreen";
 
 // const baseUrl = "http://192.168.0.108:5000";
 
@@ -62,6 +63,7 @@ export default function App() {
     <NativeBaseProvider>
       <NavigationContainer independent={true}>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
+          {/* <Stack.Screen name="OrderInforScreen" component={OrderInforScreen} /> */}
           <Stack.Screen name="TabBottom" component={TabBottom} />
           <Stack.Screen name="BookDetail" component={BookDetail} />
           <Stack.Screen name="Welcom" component={WelcomeSreen} />
