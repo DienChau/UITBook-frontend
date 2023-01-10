@@ -13,18 +13,25 @@ import {
 // import { NativeBaseConfigProvider } from "native-base/lib/typescript/core/NativeBaseContext";
 import React, { useState } from "react";
 import { AntDesign } from "@expo/vector-icons";
-import { useValidation } from "react-native-form-validator";
+
 import { Foundation } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { ImageBackground, Keyboard, ToastAndroid } from "react-native";
+import { Image, ImageBackground, Keyboard, ToastAndroid } from "react-native";
 import bgLogIn from "../../assets/bgLogIn2.png";
 import { useNavigation } from "@react-navigation/native";
 import { FontAwesome } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import Toast from "react-native-toast-message";
+import * as ImagePicker from "expo-image-picker";
+
+// import { launchCamera, launchImageLibrary } from "react-native-image-picker";
 
 const SignUp = () => {
+  const [image, setImage] = useState(
+    "https://th.bing.com/th/id/R.d3ce2d1006f2f7aad45a5e0aa8decae6?rik=rA%2fIxpegVyj5BA&pid=ImgRaw&r=0"
+  );
   const [show, setShow] = React.useState(false);
+  const [show1, setShow1] = useState(false);
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -68,54 +75,36 @@ const SignUp = () => {
     };
     console.log("user", userNew);
   };
-  async function fetchData() {
-    Keyboard.dismiss();
-    if (
-      Username === "" ||
-      Password === "" ||
-      Phonenumber === "" ||
-      ConPassword === ""
-    ) {
-      ToastAndroid.show("Vui lòng nhập đầy đủ thông tin", ToastAndroid.SHORT);
-    } else if (Password != ConPassword) {
-      ToastAndroid.show(
-        "Mật khẩu xác nhận không trùng khớp",
-        ToastAndroid.SHORT
-      );
-    } else if (isNaN(Phonenumber)) {
-      ToastAndroid.show("Số điện thoại không hợp lệ", ToastAndroid.SHORT);
-    }
-    const request = await axios.post("http://192.168.1.8:3000/signup", {
-      username: Username,
-      phonenumber: Phonenumber,
-      password: Password,
-      name: Name,
+  // const options = {
+  //   mediaType: "photo",
+  //   includeBase64: false,
+  //   maxHeight: 200,
+  //   maxWidth: 200,
+  // };
+  // const handleAvatar = () => {
+  //   console.log("hihi");
+  //   launchImageLibrary(options, (reponse) => {
+  //     console.log(reponse);
+  //   });
+  // };
+  const pickImage = async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
     });
-    if (request.data.status === "Existed") {
-      ToastAndroid.show("Tài khoản đã tồn tại", ToastAndroid.SHORT);
-      setUsername("");
-      setConPassword("");
-      setPassword("");
-      setPhoneNumber("");
-      setName("");
-    } else {
-      console.log(request.data);
-      ToastAndroid.show("Đăng ký tài khoản thành công", ToastAndroid.SHORT);
-      setUsername("");
-      setConPassword("");
-      setPassword("");
-      setPhoneNumber("");
-      setName("");
-      navigation.navigate("TabScreen", {
-        username: request.data.user_session.username,
-      });
+
+    console.log(result);
+
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
     }
-    console.log(request.data);
-  }
+  };
 
   return (
     <View style={{ flex: 1 }}>
-      <Toast />
       <ImageBackground source={bgLogIn} resizeMode="cover" style={{ flex: 1 }}>
         <View style={{ position: "absolute", top: 30, left: 20 }}>
           <Pressable onPress={handleBack}>
@@ -277,11 +266,11 @@ const SignUp = () => {
                 }
                 type={show ? "text" : "password"}
                 InputRightElement={
-                  <Pressable onPress={() => setShow(!show)}>
+                  <Pressable onPress={() => setShow1(!show1)}>
                     <Icon
                       as={
                         <MaterialCommunityIcons
-                          name={show ? "eye" : "eye-off-outline"}
+                          name={show1 ? "eye" : "eye-off-outline"}
                         />
                       }
                       size={5}
@@ -295,18 +284,69 @@ const SignUp = () => {
               {/* <FormControl.ErrorMessage>
               {isFieldInError("newPassword") && <Text>Is required</Text>}
             </FormControl.ErrorMessage> */}
-
-              <Button
-                onPress={handlePress}
-                style={{ marginTop: 20 }}
-                size="sm"
-                bg="#E8ABC3"
-                _text={{ fontSize: 18, fontWeight: "900" }}
-                _pressed={{ bg: "#ff9b8a" }}
+              <FormControl.Label
+                _text={{
+                  color: "#fff",
+                  fontSize: 15,
+                  marginTop: 2,
+                }}
               >
-                TIẾP TỤC
-              </Button>
+                Chọn ảnh đại diện
+              </FormControl.Label>
+              <View
+                alignItems={"center"}
+                justifyContent={"space-between"}
+                flexDirection={"row"}
+              >
+                <Pressable onPress={pickImage}>
+                  <View
+                    justifyContent={"center"}
+                    height={55}
+                    bg={"#bfe2fe"}
+                    padding={3}
+                    rounded={10}
+                  >
+                    <AntDesign name="folderopen" size={30} color="#fff" />
+                  </View>
+                </Pressable>
+
+                <View>
+                  {image && (
+                    <Image
+                      source={{ uri: image }}
+                      style={{
+                        width: 100,
+                        height: 100,
+                        resizeMode: "stretch",
+                        borderRadius: 50,
+                      }}
+                    />
+                  )}
+                  {/* <Image
+                    style={{
+                      width: 100,
+                      height: 100,
+                      resizeMode: "stretch",
+                      borderRadius: 50,
+                    }}
+                    source={{
+                      uri: "https://th.bing.com/th/id/R.d3ce2d1006f2f7aad45a5e0aa8decae6?rik=rA%2fIxpegVyj5BA&pid=ImgRaw&r=0",
+                    }}
+                  /> */}
+                </View>
+              </View>
             </FormControl>
+
+            <Button
+              onPress={handlePress}
+              style={{ marginTop: 20 }}
+              size="sm"
+              bg="#E8ABC3"
+              _text={{ fontSize: 18, fontWeight: "900" }}
+              _pressed={{ bg: "#ff9b8a" }}
+            >
+              TIẾP TỤC
+            </Button>
           </Box>
         </View>
       </ImageBackground>
