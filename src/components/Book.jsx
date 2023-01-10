@@ -59,6 +59,7 @@ const Book = (props) => {
                         }}
                         resizeMode="contain"
                         source={require("../../assets/book1.png")}
+
                     />
                 </View>
                 <View>

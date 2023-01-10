@@ -37,8 +37,8 @@ function Listbook(props) {
     React.useEffect(() => {
         async function fetchData() {
             try {
-                const request = await axios.get(`${baseUrl}/api/v2/books/popular`);
-                console.log(request.data.books);
+                const request = await axios.get(`${baseUrl}/api/v2/admin/users`);
+                console.log(request.data.users);
             } catch (error) {
                 console.log("error");
             }
