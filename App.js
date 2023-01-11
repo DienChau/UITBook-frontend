@@ -19,9 +19,12 @@ import DetailBook from "./src/components/BookDetail/DetailBook";
 // const baseUrl = "http://192.168.0.108:5000";
 
 import TabBottom from "./src/components/TabBottom";
+import { Provider } from "react-redux";
+import { persistor, store } from "./src/redux/store";
+import { PersistGate } from "redux-persist/integration/react";
 
 const Stack = createStackNavigator();
-
+axios.defaults.baseURL = "http://192.168.170.184:5000";
 export default function App() {
   // console.log("Hi");
   // const getMoviesFromApiAsync = async () => {
@@ -61,18 +64,21 @@ export default function App() {
   // };
   // getMoviesFromApiAsync();
   return (
-    <NativeBaseProvider>
-      <NavigationContainer independent={true}>
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="DetailBook" component={DetailBook} />
-          <Stack.Screen name="TabBottom" component={TabBottom} />
-
-          <Stack.Screen name="Welcom" component={WelcomeSreen} />
-          <Stack.Screen name="LogIn" component={LogIn} />
-          <Stack.Screen name="SignUp" component={SignUpScreen} />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </NativeBaseProvider>
+    <Provider store={store}>
+      <PersistGate loading={<Text>Loading...</Text>} persistor={persistor}>
+        <NativeBaseProvider>
+          <NavigationContainer independent={true}>
+            <Stack.Navigator screenOptions={{ headerShown: false }}>
+              <Stack.Screen name="Welcom" component={WelcomeSreen} />
+              <Stack.Screen name="LogIn" component={LogIn} />
+              <Stack.Screen name="SignUp" component={SignUpScreen} />
+              <Stack.Screen name="TabBottom" component={TabBottom} />
+              <Stack.Screen name="DetailBook" component={DetailBook} />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </NativeBaseProvider>
+      </PersistGate>
+    </Provider>
   );
 }
 
