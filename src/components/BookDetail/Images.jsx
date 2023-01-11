@@ -23,6 +23,7 @@ const Images = () => {
         source={{
           uri: "https://th.bing.com/th/id/OIP.zGTaQ-khcMHfsHm4IZqYsgHaHa?pid=ImgDet&w=1000&h=1000&rs=1",
         }}
+        alt='book'
       ></Image>
       <Carousel
         layout={"tinder"}
@@ -39,6 +40,7 @@ const Images = () => {
                 source={{
                   uri: item.item,
                 }}
+                alt='book'
               ></Image>
             </View>
           );

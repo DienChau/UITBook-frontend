@@ -61,6 +61,7 @@ const BookHorizontal = (props) => {
                         height: (windowWidth - 70) / 3,
                         width: (windowWidth - 70) / 3,
                     }}
+                    alt='book'
                     resizeMode="contain"
                     source={require("../../assets/book1.png")}
                 />

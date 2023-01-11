@@ -3,14 +3,16 @@ import React, { useState } from "react";
 import { Image, Pressable } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
+import { NumericFormat } from "react-number-format";
+
 
 const OrderItem = ({ bookItem }) => {
   const [count, setCount] = useState(1);
   const initPric = bookItem.price;
-  const VND = new Intl.NumberFormat("vi-VN", {
-    style: "currency",
-    currency: "VND",
-  });
+  // const VND = new Intl.NumberFormat("vi-VN", {
+  //   style: "currency",
+  //   currency: "VND",
+  // });
 
   const handlePlus = () => {
     setCount(count + 1);
@@ -59,7 +61,18 @@ const OrderItem = ({ bookItem }) => {
       </View>
       <View>
         <Text fontSize={18} fontWeight={"900"} color={"#DA2424"}>
-          {VND.format(initPric * count)}
+          <NumericFormat
+            value={initPric * count}
+            displayType={"text"}
+            // decimalSeparator={'.'}
+            thousandSeparator={true}
+            // thousandSeparator={"."}
+            suffix={" đ"}
+            renderText={(value) => (
+              <Text style={{ color: "#DA2424" }}>{value}</Text>
+            )}
+          />
+          {/* {VND.format(initPric * count)} */}
         </Text>
       </View>
     </View>

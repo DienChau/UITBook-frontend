@@ -8,7 +8,10 @@ import {
     Image,
     Button,
     ScrollView,
+    // Pressable,
 } from "react-native";
+import { Pressable, Box } from "native-base";
+
 import * as ImagePicker from "expo-image-picker";
 import { AntDesign } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -18,13 +21,15 @@ import AvatarImage from "../../assets/avatar.jpg";
 import { Feather } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
-// import { FontAwesome5 } from '@expo/vector-icons';
+import { useNavigation } from "@react-navigation/native";
+
 
 import Header from "../components/Header";
 import { Center } from "native-base";
 // import { Button } from "native-base";
 
 const Account = () => {
+    const navigation = useNavigation();
     const [hasGalleryPermission, setHasGalleryPermission] = useState(null);
     const [imageAvatar, setImageAvatar] = useState(
         "https://www.invert.vn/media/uploads/uploads/2022/9/17165757-39.jpeg"
@@ -52,7 +57,7 @@ const Account = () => {
             setImageAvatar(result.uri);
         }
         if (hasGalleryPermission === false) {
-            return <Tex>No access to Internal Storage</Tex>;
+            return <Text>No access to Internal Storage</Text>;
         }
     };
 
@@ -67,7 +72,38 @@ const Account = () => {
                     marginRight: 30,
                 }}
             >
-                <FontAwesome name="shopping-basket" size={24} color="#000" />
+                {/* <Pressable
+                    onPress={() => { navigation.navigate("OrderScreen"); }}
+                    flex={1} justifyContent="center" alignItems="center" marginBottom={10} >
+                    <FontAwesome name="shopping-basket" size={24} color="#888" />
+                    <Box
+                        px={1}
+                        rounded='full'
+                        position='absolute'
+                        top={1}
+                        left={10}
+                        bg={'#E72A2A'}
+                        _text={{
+                            color: '#fff',
+                            fontSize: '11px'
+                        }}
+                    >5</Box>
+                </Pressable> */}
+                <Pressable onPress={() => { navigation.navigate("OrderScreen"); }}>
+                    <FontAwesome name="shopping-basket" size={24} color="#888" />
+                    <Box
+                        px={1}
+                        rounded='full'
+                        position='absolute'
+                        top={-8}
+                        left={4}
+                        bg={'#E72A2A'}
+                        _text={{
+                            color: '#fff',
+                            fontSize: '11px'
+                        }}
+                    >5</Box>
+                </Pressable>
             </View>
             <ScrollView>
                 <View style={{ flex: 3 }}>
@@ -361,7 +397,8 @@ const Account = () => {
                                 Thông tin thành viên
                             </Text>
                         </View>
-                        <View
+                        <TouchableOpacity
+                            onPress={() => { navigation.navigate("LogIn"); }}
                             style={{
                                 flexDirection: "row",
                                 backgroundColor: "#fff",
@@ -372,6 +409,7 @@ const Account = () => {
                             }}
                         >
                             <View
+
                                 style={{
                                     backgroundColor: "#E8ABC3",
                                     borderRadius: 50,
@@ -381,7 +419,7 @@ const Account = () => {
                                 <FontAwesome name="sign-out" size={24} color="#fff" />
                             </View>
                             <Text style={{ marginLeft: 10, fontSize: 16 }}>Đăng xuất</Text>
-                        </View>
+                        </TouchableOpacity>
                     </View>
                 </View>
             </ScrollView>

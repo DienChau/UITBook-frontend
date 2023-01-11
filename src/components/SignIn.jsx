@@ -34,6 +34,7 @@ const SignIn = () => {
     if (name === "" || password === "") {
       ToastAndroid.show("Vui lòng nhập đầy đủ thông tin", ToastAndroid.SHORT);
     }
+    navigation.navigate("TabBottom");
   };
 
   const _onPressButton = () => {

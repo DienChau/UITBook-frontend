@@ -12,15 +12,39 @@ import {
   Icon,
   ScrollView,
 } from "native-base";
+import { Dimensions, TouchableOpacity, Image } from "react-native"
+
+import products from "../data/Product";
+const windowWidth = Dimensions.get("window").width;
+import { NumericFormat } from "react-number-format";
+import { MaterialIcons, AntDesign } from "@expo/vector-icons";
 
 import React, { useState } from "react";
 import Header from "./Header";
 import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 import Checkbox from "expo-checkbox";
-import { MaterialIcons } from "@expo/vector-icons";
+// import { MaterialIcons } from "@expo/vector-icons";
 import Book from "./Book";
 
 const Books = () => {
+  const navigation = useNavigation()
+
+  const [isFavorite, setFavoriteIcon] = useState(false)
+  const addFavoriteHandler = (id) => {
+    const match = products.find((product) => product._id === id);
+    console.log(match)
+    if (match) {
+      setFavoriteIcon(!isFavorite)
+    }
+
+    // if (favoriteIcon == 'favorite-outline') {
+    //   setFavoriteIcon('favorite')
+    // } else {
+    //   setFavoriteIcon('favorite-outline')
+
+    // }
+  };
   const { isOpen, onOpen, onClose } = useDisclose();
   const [price, setPrice] = useState(500000);
 
@@ -137,9 +161,109 @@ const Books = () => {
           bg: "#fff",
         }}
       />
-      <View style={{ paddingHorizontal: 20, flexDirection: 'row' }}>
-        <Book />
-        <Book />
+      <View style={{
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'space-between',
+        marginVertical: 10,
+        paddingHorizontal: 20
+      }} >
+        {
+          products.map((product) => (
+            <View
+              key={product._id}
+              style={{
+                backgroundColor: "#fff",
+                borderRadius: 10,
+                // marginRight: 12,
+                // marginTop: 3,
+                marginBottom: 10,
+                width: (windowWidth - 50) / 2,
+                padding: 12,
+                justifyContent: "center",
+                position: "relative",
+                shadowColor: "#000",
+                shadowOffset: {
+                  width: 0,
+                  height: 2,
+                },
+                shadowOpacity: 0.23,
+                shadowRadius: 2.62,
+                elevation: 4,
+              }}
+            >
+              <TouchableOpacity
+                onPress={() => { addFavoriteHandler(product._id) }}
+                style={{ position: "absolute", left: 10, top: 10, zIndex: 2 }}
+              >
+                <MaterialIcons name={isFavorite ? 'favorite' : 'favorite-outline'} size={26} color={"#E8ABC3"} />
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => navigation.navigate("DetailBook", product)}
+              >
+                <View style={{ flexDirection: "row", justifyContent: "center" }}>
+                  <Image
+                    style={{
+                      height: 100,
+                      height: (windowWidth - 70) / 3,
+                      width: (windowWidth - 70) / 3,
+                    }}
+                    resizeMode="contain"
+                    source={{ uri: product.images[0].url }}
+                    alt={product.name}
+                  />
+                </View>
+                <View>
+                  <Text
+                    ellipsizeMode="tail"
+                    numberOfLines={2}
+                    style={{
+                      width: "100%",
+                      textAlign: "center",
+                      fontSize: 14,
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      lineHeight: 18,
+                      marginTop: 10,
+                    }}
+                  >
+                    {product.name}
+                  </Text>
+                </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={() => navigation.navigate("DetailBook", product)} style={{ alignItems: "center", marginTop: 6 }}>
+                <NumericFormat
+                  value={product.price}
+                  displayType={"text"}
+                  // decimalSeparator={'.'}
+                  thousandSeparator={true}
+                  // thousandSeparator={"."}
+                  suffix={" đ"}
+                  renderText={(value) => (
+                    <Text style={{ color: "#DA2424" }}>{value}</Text>
+                  )}
+                />
+              </TouchableOpacity>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  marginTop: 6,
+                }}
+              >
+                <Text>
+                  Đã bán: <Text>{product.Sold}</Text>
+                </Text>
+                <Text>
+                  {product.ratings}
+                  <AntDesign name="star" size={16} color="#fedc00" />
+                </Text>
+              </View>
+            </View>
+          ))
+        }
       </View>
 
       {/* <FlatList renderItem={() => <Text>HHH</Text>}></FlatList> */}

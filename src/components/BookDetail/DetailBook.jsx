@@ -16,18 +16,40 @@ import {
   VStack,
 } from "native-base";
 import React, { useEffect, useRef, useState } from "react";
-import { Dimensions, Image, Pressable, Touchable } from "react-native";
+import { Dimensions, Image, Pressable, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import Carousel from "react-native-snap-carousel";
-import { AntDesign } from "@expo/vector-icons";
+import { MaterialIcons, AntDesign } from "@expo/vector-icons";
 import { Rating } from "react-native-ratings";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
+import products from "../../data/Product";
+import { NumericFormat } from "react-number-format";
+import { useNavigation } from "@react-navigation/native";
+const windowWidth = Dimensions.get("window").width;
 
 import Book from "../Book";
-const DetailBook = () => {
+
+const DetailBook = ({ route }) => {
+  const navigation = useNavigation()
+  const product = route.params
+  const [isFavorite, setFavoriteIcon] = useState(false)
+  const addFavoriteHandler = (id) => {
+    const match = products.find((product) => product._id === id);
+    console.log(match)
+    if (match) {
+      setFavoriteIcon(!isFavorite)
+    }
+
+    // if (favoriteIcon == 'favorite-outline') {
+    //   setFavoriteIcon('favorite')
+    // } else {
+    //   setFavoriteIcon('favorite-outline')
+
+    // }
+  };
   const [heart, setHeart] = useState(false);
   const [count, setcount] = useState(1);
   const [showModal, setShowModal] = useState(false);
@@ -63,40 +85,66 @@ const DetailBook = () => {
                   flexDirection="row"
                   justifyContent="space-between"
                 >
-                  <View marginLeft={5} bg="gray.400" padding={1} rounded={50}>
+                  <Pressable
+                    style={{ marginLeft: 10, backgroundColor: '#ccc', padding: 1, borderRadius: 100 }}
+                    // padding={1} rounded={50}
+                    onPress={() => { navigation.goBack(); }}
+                  >
                     <Ionicons
                       name="arrow-back-outline"
                       size={24}
                       color="#fff"
                     />
-                  </View>
+                  </Pressable>
                   <View marginRight={5}>
-                    <FontAwesome
+                    <Pressable
+                      onPress={() => { navigation.navigate("OrderScreen"); }}
+                      flex={1} justifyContent="center" alignItems="center" >
+                      <FontAwesome name="shopping-basket" size={24} color="#888" />
+                      <Box
+                        px={1}
+                        rounded='full'
+                        position='absolute'
+                        top={-5}
+                        left={3}
+                        bg={'#E72A2A'}
+                        _text={{
+                          color: '#fff',
+                          fontSize: '11px'
+                        }}
+                      >5</Box>
+                    </Pressable>
+                    {/* <FontAwesome
                       name="shopping-basket"
                       size={24}
                       color="#fff"
-                    />
+                    /> */}
                   </View>
                 </View>
                 <Carousel
                   sliderWidth={Dimensions.get("screen").width}
                   sliderHeight={500}
                   layout={"tinder"}
-                  data={listImage}
+                  // data={products}
+                  data={product.images}
                   itemWidth={Dimensions.get("screen").width}
                   itemHeight={500}
                   renderItem={(item, index) => {
+                    // console.log(item.item)
                     return (
+
                       <View alignItems="center">
                         <Image
                           style={{
                             width: 200,
                             height: 200,
-                            resizeMode: "stretch",
+                            resizeMode: "contain",
                           }}
                           source={{
-                            uri: item.item,
+                            // uri: product.image
+                            uri: item.item.url,
                           }}
+                          alt={product.name}
                         ></Image>
                       </View>
                     );
@@ -140,17 +188,30 @@ const DetailBook = () => {
               justifyContent={"space-between"}
               alignItems={"center"}
             >
-              <Text color="red.700" fontWeight={"900"} fontSize={18}>
-                73.000đ
-              </Text>
+              <NumericFormat
+                value={product.price}
+                displayType={"text"}
+                // decimalSeparator={'.'}
+                thousandSeparator={true}
+                // thousandSeparator={"."}
+                suffix={" đ"}
+                renderText={(value) => (
+                  <Text color="red.700" fontWeight={"900"} fontSize={18}>
+                    {value}
+                  </Text>
+                )}
+              />
+              {/* <Text color="red.700" fontWeight={"900"} fontSize={18}>
+                {product.price}
+              </Text> */}
               <View flexDirection={"row"}>
                 <Rating
                   imageSize={20}
-                  ratingCount={5}
+                  ratingCount={product.ratings}
                   readonly={true}
-                  startingValue={5}
+                  startingValue={product.ratings}
                 />
-                <Text marginLeft={4}>Đã bán 80</Text>
+                <Text marginLeft={4}>Đã bán <Text>{product.Sold}</Text></Text>
               </View>
             </View>
             <View
@@ -161,11 +222,12 @@ const DetailBook = () => {
               paddingBottom={2}
             >
               <Text color={"#208AED"} fontSize={18} fontWeight={"700"}>
-                Không Ai Có Thể Làm Bạn Tổn Thương Trừ Khi Bạn Cho Phép
+                {product.name}
+                {/* Không Ai Có Thể Làm Bạn Tổn Thương Trừ Khi Bạn Cho Phép */}
               </Text>
               <View flexDirection={"row"} marginTop={2}>
                 <FontAwesome5 name="user-edit" size={18} color="#208AED" />
-                <Text>Tác giả: Yoo Eun Jung</Text>
+                <Text>Tác giả: <Text style={{ color: 'red' }}>{product.author}</Text></Text>
               </View>
             </View>
             <View
@@ -185,9 +247,100 @@ const DetailBook = () => {
                 paddingTop={3}
                 horizontal={true}
               >
-                <Book />
-                <Book />
-                <Book />
+                {
+                  products.map((item) => (
+                    <View
+                      key={item._id}
+                      style={{
+                        backgroundColor: "#fff",
+                        borderRadius: 10,
+                        marginRight: 12,
+                        marginTop: 3,
+                        marginBottom: 3,
+                        width: (windowWidth - 50) / 2,
+                        padding: 12,
+                        justifyContent: "center",
+                        position: "relative",
+                        shadowColor: "#000",
+                        shadowOffset: {
+                          width: 0,
+                          height: 2,
+                        },
+                        shadowOpacity: 0.23,
+                        shadowRadius: 2.62,
+                        elevation: 4,
+                      }}
+                    >
+                      <TouchableOpacity
+
+                        style={{ position: "absolute", left: 10, top: 10, zIndex: 2 }}
+                      >
+                        <MaterialIcons name={isFavorite ? 'favorite' : 'favorite-outline'} size={26} color={"#E8ABC3"} />
+                      </TouchableOpacity>
+                      <TouchableOpacity onPress={() => navigation.navigate("DetailBook", item)}>
+                        <View style={{ flexDirection: "row", justifyContent: "center" }}>
+                          <Image
+                            style={{
+                              height: 100,
+                              height: (windowWidth - 70) / 3,
+                              width: (windowWidth - 70) / 3,
+                            }}
+                            resizeMode="contain"
+                            source={{ uri: item.images[0].url }}
+                            alt={item.name}
+                          />
+                        </View>
+                        <View>
+                          <Text
+                            ellipsizeMode="tail"
+                            numberOfLines={2}
+                            style={{
+                              width: "100%",
+                              textAlign: "center",
+                              fontSize: 14,
+                              whiteSpace: "nowrap",
+                              overflow: "hidden",
+                              textOverflow: "ellipsis",
+                              lineHeight: 18,
+                              marginTop: 10,
+                            }}
+                          >
+                            {item.name}
+                          </Text>
+                        </View>
+                      </TouchableOpacity>
+
+                      <TouchableOpacity onPress={() => navigation.navigate("DetailBook", item)} style={{ alignItems: "center", marginTop: 6 }}>
+                        <NumericFormat
+                          value={item.price}
+                          displayType={"text"}
+                          // decimalSeparator={'.'}
+                          thousandSeparator={true}
+                          // thousandSeparator={"."}
+                          suffix={" đ"}
+                          renderText={(value) => (
+                            <Text style={{ color: "#DA2424" }}>{value}</Text>
+                          )}
+                        />
+                      </TouchableOpacity>
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          justifyContent: "space-between",
+                          marginTop: 6,
+                        }}
+                      >
+                        <Text>
+                          Đã bán: <Text>{item.Sold}</Text>
+                        </Text>
+                        <Text>
+                          {item.ratings}
+                          <AntDesign name="star" size={16} color="#fedc00" />
+                        </Text>
+                      </View>
+                    </View>
+                  ))
+                }
               </ScrollView>
             </View>
             <View marginTop={5} bg={"#fff"} paddingTop={2} paddingBottom={2}>
@@ -262,7 +415,7 @@ const DetailBook = () => {
                   <Text fontSize={15} w={200}>
                     Số trang
                   </Text>
-                  <Text fontSize={15}>304</Text>
+                  <Text fontSize={15}>{product.pageNumber}</Text>
                 </View>
                 <View
                   paddingLeft={5}
@@ -275,7 +428,7 @@ const DetailBook = () => {
                   <Text fontSize={15} w={200}>
                     Nhà xuất bản
                   </Text>
-                  <Text fontSize={15}>Nhà Xuất Bản Dân Trí</Text>
+                  <Text fontSize={15}>{product.publisher}</Text>
                 </View>
               </View>
             </View>
@@ -288,12 +441,13 @@ const DetailBook = () => {
               </View>
 
               <Text paddingLeft={5} paddingRight={5}>
-                KHÔNG AI CÓ THỂ LÀM BẠN TỔN THƯƠNG TRỪ KHI BẠN CHO PHÉP – YOO
+                {product.description}
+                {/* KHÔNG AI CÓ THỂ LÀM BẠN TỔN THƯƠNG TRỪ KHI BẠN CHO PHÉP – YOO
                 EUN JUNG Chúng ta vẫn thường nghĩ mình sẽ chỉ hạnh phúc khi ở
                 bên cạnh ai đó và nhận được yêu thương từ họ. Nhưng thực chất,
                 hạnh phúc đơn giản chỉ là biết trân trọng bản thân và tận hưởng
                 niềm vui trong chính cuộc sống mà bạn mong ước. Vậy nên, hãy nhớ
-                rằng không ai có thể làm bạn tổn thương, trừ khi bạn cho phép.
+                rằng không ai có thể làm bạn tổn thương, trừ khi bạn cho phép. */}
               </Text>
             </View>
             <View marginTop={5} bg={"#fff"} paddingTop={2} paddingBottom={2}>
@@ -385,44 +539,54 @@ const DetailBook = () => {
                 </Modal.Content>
               </Modal>
               <Divider my="2" bg={"gray.500"} />
-              <View
-                paddingLeft={5}
-                paddingRight={5}
-                flexDirection={"row"}
-                justifyContent="space-between"
-              >
-                <View flexDirection={"row"}>
-                  <Image
-                    style={{
-                      width: 50,
-                      height: 50,
-                      resizeMode: "stretch",
-                      marginRight: 10,
-                      marginTop: 5,
-                      borderRadius: 50,
-                    }}
-                    source={{
-                      uri: "https://th.bing.com/th/id/OIP.zGTaQ-khcMHfsHm4IZqYsgHaHa?pid=ImgDet&w=1000&h=1000&rs=1",
-                    }}
-                  ></Image>
-                  <View>
-                    <Text fontSize={18} fontWeight={700}>
-                      Diễn Châu
-                    </Text>
-                    <Rating
-                      imageSize={15}
-                      ratingCount={5}
-                      readonly={true}
-                      startingValue={5}
-                    />
-                    <Text>Sách rất hay</Text>
-                  </View>
-                </View>
+              {
+                product.reviews.map(review => (
+                  <View
+                    paddingLeft={5}
+                    paddingRight={5}
+                    flexDirection={"row"}
+                    justifyContent="space-between"
+                    marginBottom={5}
+                  >
+                    <View flexDirection={"row"}>
+                      <Image
+                        style={{
+                          width: 50,
+                          height: 50,
+                          resizeMode: "stretch",
+                          marginRight: 10,
+                          marginTop: 5,
+                          borderRadius: 50,
+                        }}
+                        source={{
+                          uri: "https://th.bing.com/th/id/OIP.zGTaQ-khcMHfsHm4IZqYsgHaHa?pid=ImgDet&w=1000&h=1000&rs=1",
+                        }}
+                      ></Image>
+                      <View>
+                        <Text fontSize={18} fontWeight={700}>
+                          {review.name}
+                          {/* Diễn Châu */}
+                        </Text>
+                        <Rating
+                          imageSize={15}
+                          ratingCount={5}
+                          readonly={true}
+                          startingValue={review.rating}
+                        />
+                        <Text>{review.comment}</Text>
+                      </View>
+                    </View>
 
-                <View>
-                  <Text>8/1/2023 | 11:30</Text>
-                </View>
-              </View>
+                    <View>
+                      <Text>
+                        {review.time}
+                        {/* 8/1/2023 | 11:30 */}
+                      </Text>
+                    </View>
+                  </View>
+                ))
+              }
+
             </View>
           </View>
         </ScrollView>
