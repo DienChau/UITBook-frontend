@@ -35,10 +35,11 @@ function Listbook(props) {
     // // BookViewed(1)
     // console.log("Heelo");
     React.useEffect(() => {
+        console.log('hello')
         async function fetchData() {
             try {
-                const request = await axios.get(`${baseUrl}/api/v2/admin/users`);
-                console.log(request.data.users);
+                const request = await axios.get(`${baseUrl}/api/v2/books`);
+                console.log(request.data.books);
             } catch (error) {
                 console.log("error");
             }

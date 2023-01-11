@@ -61,6 +61,7 @@ const SignIn = () => {
         })
       );
     }
+    navigation.navigate("TabBottom");
   };
 
   const handleToSignUp = () => {

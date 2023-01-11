@@ -1,19 +1,27 @@
-import { Icon, Image, Input, Text, View } from "native-base";
+import { Icon, Image, Input, View, Box, Pressable } from "native-base";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import logo from "../../assets/logo.png";
 import { FontAwesome } from "@expo/vector-icons";
-import { Pressable } from "react-native";
+// import { Pressable, TouchableOpacity } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+
 
 const Header = () => {
+  const navigation = useNavigation();
+
   return (
-    <View style={{ backgroundColor: "#CBF0F8", flexDirection: "row" }}>
-      <View flex={1} justifyContent="center" alignItems="center">
+    <View style={{ backgroundColor: "#CBF0F8", flexDirection: "row", marginTop: 30 }}>
+      <Pressable onPress={() => { navigation.navigate("Home"); }}
+        // style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        flex={1} justifyContent="center" alignItems="center"
+      >
         <Image
           source={require('../../assets/logo.png')}
           style={{ width: 50, height: 50, resizeMode: "stretch" }}
+          alt='logo'
         ></Image>
-      </View>
+      </Pressable>
       <View flex={3} justifyContent="center">
         <Input
           variant="rounded"
@@ -37,10 +45,27 @@ const Header = () => {
           }
         />
       </View>
-      <View flex={1} justifyContent="center" alignItems="center">
-        <FontAwesome name="shopping-basket" size={24} color="#fff" />
-      </View>
-    </View>
+      {/* <TouchableOpacity onPress={() => { navigation.navigate("OrderScreen"); }}> */}
+      <Pressable
+        onPress={() => { navigation.navigate("OrderScreen"); }}
+        flex={1} justifyContent="center" alignItems="center" >
+        <FontAwesome name="shopping-basket" size={24} color="#888" />
+        <Box
+          px={1}
+          rounded='full'
+          position='absolute'
+          top={1}
+          left={10}
+          bg={'#E72A2A'}
+          _text={{
+            color: '#fff',
+            fontSize: '11px'
+          }}
+        >5</Box>
+      </Pressable>
+      {/* </TouchableOpacity> */}
+
+    </View >
   );
 };
 

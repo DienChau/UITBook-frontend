@@ -15,7 +15,11 @@ import { SwipeListView } from "react-native-swipe-list-view";
 import OrderItem from "./OrderItem";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import question from "../../../assets/question.gif";
+import { useNavigation } from "@react-navigation/native";
+
 const Order = () => {
+  const navigation = useNavigation();
+
   const [isOpen, setIsOpen] = useState(false);
 
   const onClose = () => setIsOpen(false);
@@ -63,9 +67,9 @@ const Order = () => {
         flexDirection="row"
         justifyContent="space-between"
       >
-        <View marginLeft={5}>
+        <Pressable marginLeft={5} onPress={() => { navigation.goBack(); }}>
           <Ionicons name="arrow-back-outline" size={24} color="#40494b" />
-        </View>
+        </Pressable>
         <View>
           <Text color={"#40494b"} fontWeight={"900"} fontSize={20}>
             Giỏ hàng
@@ -189,6 +193,7 @@ const Order = () => {
                 source={{
                   uri: "https://thuthuatnhanh.com/wp-content/uploads/2020/02/icon-ong-bee-phan-van.png",
                 }}
+                alt='hinh'
                 style={{ width: 100, height: 100, resizeMode: "stretch" }}
               />
             </View>

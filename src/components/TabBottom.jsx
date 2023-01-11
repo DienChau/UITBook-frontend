@@ -15,6 +15,7 @@ import Account from '../screen/Account'
 // import ProfileStackScreen from '../screen/ProfileStackScreen';
 
 import { useNavigation, useRoute } from '@react-navigation/native';
+import StackNav from '../../Navigations/StackNav';
 
 const Tab = createMaterialBottomTabNavigator();
 
