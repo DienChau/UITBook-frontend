@@ -1,3 +1,5 @@
+import React, { useEffect, useRef, useState } from "react";
+import axios from "axios";
 import {
   Avatar,
   Box,
@@ -15,7 +17,6 @@ import {
   View,
   VStack,
 } from "native-base";
-import React, { useEffect, useRef, useState } from "react";
 import { Dimensions, Image, Pressable, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
@@ -35,24 +36,10 @@ import Book from "../Book";
 const DetailBook = ({ route }) => {
   //Scroll to TOp
   const scrollRef = useRef();
-
+  //navigation
   const navigation = useNavigation()
   const product = route.params
-  const [isFavorite, setFavoriteIcon] = useState(false)
-  const addFavoriteHandler = (id) => {
-    const match = products.find((product) => product._id === id);
-    console.log(match)
-    if (match) {
-      setFavoriteIcon(!isFavorite)
-    }
-
-    // if (favoriteIcon == 'favorite-outline') {
-    //   setFavoriteIcon('favorite')
-    // } else {
-    //   setFavoriteIcon('favorite-outline')
-
-    // }
-  };
+  //State
   const [heart, setHeart] = useState(false);
   const [count, setcount] = useState(1);
   const [showModal, setShowModal] = useState(false);
@@ -60,6 +47,38 @@ const DetailBook = ({ route }) => {
   const button = useRef();
   useEffect(() => {
     console.log(button.current.height);
+  }, []);
+
+  //Call API
+  const [newBooks, setNewBooks] = React.useState([]);
+  const [popularBooks, setPopularBooks] = React.useState([]);
+
+  React.useEffect(() => {
+    // console.log('hello')
+    async function fetchDataPopularBooks() {
+      try {
+        const request = await axios.get('/api/v2/books/popular');
+        setPopularBooks(request.data.books);
+        return request.data.books;
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    fetchDataPopularBooks();
+  }, []);
+
+  React.useEffect(() => {
+    // console.log('hello')
+    async function fetchDataNewBooks() {
+      try {
+        const request = await axios.get('/api/v2/books/new');
+        setNewBooks(request.data.books);
+        return request.data.books;
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    fetchDataNewBooks();
   }, []);
 
   const listImage = [
@@ -251,7 +270,7 @@ const DetailBook = ({ route }) => {
                 horizontal={true}
               >
                 {
-                  products.map((item) => (
+                  popularBooks.map((item) => (
                     <View
                       key={item._id}
                       style={{
@@ -278,7 +297,7 @@ const DetailBook = ({ route }) => {
 
                         style={{ position: "absolute", left: 10, top: 10, zIndex: 2 }}
                       >
-                        <MaterialIcons name={isFavorite ? 'favorite' : 'favorite-outline'} size={26} color={"#E8ABC3"} />
+                        <MaterialIcons name={'favorite-outline'} size={26} color={"#E8ABC3"} />
                       </TouchableOpacity>
                       <TouchableOpacity onPress={() => navigation.navigate("DetailBook", item)}>
                         <View style={{ flexDirection: "row", justifyContent: "center" }}>
@@ -610,7 +629,7 @@ const DetailBook = ({ route }) => {
               horizontal={true}
             >
               {
-                products.map((item) => (
+                newBooks.map((item) => (
                   <View
                     key={item._id}
                     style={{
@@ -637,7 +656,7 @@ const DetailBook = ({ route }) => {
 
                       style={{ position: "absolute", left: 10, top: 10, zIndex: 2 }}
                     >
-                      <MaterialIcons name={isFavorite ? 'favorite' : 'favorite-outline'} size={26} color={"#E8ABC3"} />
+                      <MaterialIcons name={'favorite-outline'} size={26} color={"#E8ABC3"} />
                     </TouchableOpacity>
                     <TouchableOpacity
                       // onPress={onPressTouch}

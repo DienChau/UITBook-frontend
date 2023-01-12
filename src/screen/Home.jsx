@@ -3,46 +3,74 @@ import { ScrollView, Text, View, Dimensions, StyleSheet, SafeAreaView, Image, To
 import Listbook from "../components/ListBook";
 import BookHorizontal from "../components/BookHorizontal";
 import Header from "../components/Header";
+import axios from "axios";
+import { Rating } from "react-native-ratings";
 
 import { MaterialIcons, AntDesign } from "@expo/vector-icons";
 import { NumericFormat } from "react-number-format";
-const windowWidth = Dimensions.get("window").width;
 
-import products from '../data/Product'
+// import products from '../data/Product'
 import { useNavigation } from "@react-navigation/native";
 
+
+const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
+const baseUrl = "http://192.168.0.108:5000";
 
 const Home = () => {
   const navigation = useNavigation()
-  const [isFavorite, setFavoriteIcon] = useState(false)
-  const addFavoriteHandler = (id) => {
-    const match = products.find((product) => product._id === id);
-    console.log(match)
-    if (match) {
-      setFavoriteIcon(!isFavorite)
+  const [products, setProducts] = React.useState([]);
+  const [popularBooks, setPopularBooks] = React.useState([]);
+
+  //Call API
+  React.useEffect(() => {
+    // console.log('hello')
+    async function fetchData() {
+      try {
+        const request = await axios.get('/api/v2/books');
+        setProducts(request.data.books);
+        return request.data.books;
+      } catch (error) {
+        console.log(error);
+      }
     }
-
-    // if (favoriteIcon == 'favorite-outline') {
-    //   setFavoriteIcon('favorite')
-    // } else {
-    //   setFavoriteIcon('favorite-outline')
-
-    // }
-  };
+    fetchData();
+  }, []);
+  React.useEffect(() => {
+    // console.log('hello')
+    async function fetchDataPopularBooks() {
+      try {
+        const request = await axios.get('/api/v2/books/popular');
+        setPopularBooks(request.data.books);
+        return request.data.books;
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    fetchDataPopularBooks();
+  }, []);
   return (
 
     <ScrollView style={{ backgroundColor: '#CBF0F8', flex: 1, padding: 10, paddingTop: 0 }}>
-      {/* <Text>This is home</Text> */}
       <SafeAreaView>
         <Header />
-
         {/* <Listbook onPress={addFavoriteHandler} /> */}
+        <View style={{ marginTop: 10 }}>
+          <Text style={{ fontSize: 16 }}>Bán chạy nhất</Text>
+          <View
+            style={{
+              marginTop: 5,
+              borderBottomColor: '#ccc',
+              borderBottomWidth: 1,
+            }}
+          />
+        </View>
         <ScrollView horizontal={true} contentContainerStyle={{
           flexDirection: 'row', height: 250,
           justifyContent: 'space-between',
           marginVertical: 10
         }}>
+
           {
             products.map((product) => (
               <View
@@ -68,10 +96,9 @@ const Home = () => {
                 }}
               >
                 <TouchableOpacity
-                  onPress={() => { addFavoriteHandler(product._id) }}
                   style={{ position: "absolute", left: 10, top: 10, zIndex: 2 }}
                 >
-                  <MaterialIcons name={isFavorite ? 'favorite' : 'favorite-outline'} size={26} color={"#E8ABC3"} />
+                  <MaterialIcons name={'favorite-outline'} size={26} color={"#E8ABC3"} />
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => navigation.navigate("DetailBook", product)}
@@ -131,14 +158,29 @@ const Home = () => {
                   <Text>
                     Đã bán: <Text>{product.Sold}</Text>
                   </Text>
-                  <Text>
+                  <View style={{ alignItems: 'center', flexDirection: 'row' }}>
+                    <Text>
+
+                      {Math.floor(product.ratings * 10) / 10}
+                    </Text>
+                    <Rating
+                      imageSize={15}
+                      ratingCount={1}
+                      readonly={true}
+                      startingValue={product.ratings}
+                    />
+                  </View>
+                  {/* <Text>
+                    {Math.floor(5.95)}
+                    {Math.floor(product.ratings * 10) / 10}
                     {product.ratings}
                     <AntDesign name="star" size={16} color="#fedc00" />
-                  </Text>
+                  </Text> */}
                 </View>
               </View>
             ))
           }
+
         </ScrollView>
 
 
@@ -154,7 +196,7 @@ const Home = () => {
         </View>
         <View style={{ marginBottom: 24 }}>
           {
-            products.map((product) => (
+            popularBooks.map((product) => (
               <View
                 key={product._id}
                 style={[
@@ -173,10 +215,9 @@ const Home = () => {
               >
 
                 <TouchableOpacity
-                  onPress={addFavoriteHandler}
                   style={{ position: "absolute", left: 10, top: 10, zIndex: 2 }}
                 >
-                  <MaterialIcons name={isFavorite ? 'favorite' : 'favorite-outline'} size={26} color={"#E8ABC3"} />
+                  <MaterialIcons name={'favorite-outline'} size={26} color={"#E8ABC3"} />
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => navigation.navigate("DetailBook", product)}
@@ -233,10 +274,22 @@ const Home = () => {
                     <Text>
                       Đã bán: <Text>{product.Sold}</Text>
                     </Text>
-                    <Text>
+                    <View style={{ alignItems: 'center', flexDirection: 'row' }}>
+                      <Text>
+
+                        {Math.floor(product.ratings * 10) / 10}
+                      </Text>
+                      <Rating
+                        imageSize={15}
+                        ratingCount={1}
+                        readonly={true}
+                        startingValue={product.ratings}
+                      />
+                    </View>
+                    {/* <Text>
                       {product.ratings}
                       <AntDesign name="star" size={16} color="#fedc00" />
-                    </Text>
+                    </Text> */}
                   </View>
                 </View>
 
