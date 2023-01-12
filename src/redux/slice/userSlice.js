@@ -24,7 +24,7 @@ const userSlice = createSlice({
       .addCase(registerRequest.fulfilled, (state, action) => {
         console.log("fullfill");
         state.loading = false;
-        state.isAuthenticated = true;
+
         state.success = action.payload.success;
         state.registerSuccess = true;
       })
@@ -52,6 +52,16 @@ const userSlice = createSlice({
         state.loading = false;
         state.isAuthenticated = false;
         state.error = action.payload.message;
+      })
+      .addCase(logoutRequest.fulfilled, (state, action) => {
+        state.loading = false;
+        state.isAuthenticated = false;
+        state.user = null;
+        state.status = action.payload.success;
+        // persistor.purge();
+      })
+      .addCase(logoutRequest.rejected, (state, action) => {
+        state.status = action.payload.success;
       });
   },
 });
@@ -101,6 +111,23 @@ export const loginRequest = createAsyncThunk(
       }
       return rejectWithValue(err.response.data);
     }
+  }
+);
+export const logoutRequest = createAsyncThunk(
+  "user/logoutRequest",
+  async () => {
+    const data = await axios
+      .get("/api/v2/logout")
+      .then((res) => {
+        console.log("user/logoutRequest", res.data);
+        return res.data;
+      })
+      .catch((err) => {
+        console.log("user/logoutRequest", err);
+        return err;
+      });
+
+    return data;
   }
 );
 

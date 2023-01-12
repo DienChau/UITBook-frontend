@@ -47,6 +47,7 @@ const SignUp = () => {
   useEffect(() => {
     if (error) {
       ToastAndroid.show(`${error}`, ToastAndroid.SHORT);
+      dispatch(clear());
     }
     if (success) {
       console.log("signUp", success);

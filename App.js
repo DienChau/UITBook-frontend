@@ -20,12 +20,13 @@ import DetailBook from "./src/components/BookDetail/DetailBook";
 // const baseUrl = "http://192.168.0.108:5000";
 
 import TabBottom from "./src/components/TabBottom";
-import { Provider } from "react-redux";
+import { Provider, useSelector } from "react-redux";
 import { persistor, store } from "./src/redux/store";
 import { PersistGate } from "redux-persist/integration/react";
+import Routes from "./Navigations/Routes";
 
 const Stack = createStackNavigator();
-axios.defaults.baseURL = "http://192.168.0.108:5000";
+axios.defaults.baseURL = "http://192.168.170.184:5000";
 export default function App() {
   // console.log("Hi");
   // const getMoviesFromApiAsync = async () => {
@@ -64,24 +65,12 @@ export default function App() {
   //   }
   // };
   // getMoviesFromApiAsync();
+
   return (
     <Provider store={store}>
       <PersistGate loading={<Text>Loading...</Text>} persistor={persistor}>
         <NativeBaseProvider>
-          <NavigationContainer independent={true}>
-            <Stack.Navigator screenOptions={{ headerShown: false }}>
-              <Stack.Screen name="Welcome" component={WelcomeSreen} />
-              <Stack.Screen name="LogIn" component={LogIn} />
-              <Stack.Screen name="SignUp" component={SignUpScreen} />
-              <Stack.Screen name="TabBottom" component={TabBottom} />
-              <Stack.Screen name="DetailBook" component={DetailBook} />
-              <Stack.Screen name="OrderScreen" component={OrderScreen} />
-              <Stack.Screen
-                name="OrderInforScreen"
-                component={OrderInforScreen}
-              />
-            </Stack.Navigator>
-          </NavigationContainer>
+          <Routes />
         </NativeBaseProvider>
       </PersistGate>
     </Provider>
