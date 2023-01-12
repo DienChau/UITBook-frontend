@@ -43,7 +43,7 @@
     "react-number-format": "^5.1.2",
     "react-redux": "^8.0.5",
     "reanimated-bottom-sheet": "^1.0.0-alpha.22",
-    "react-native-screens": "~3.18.0"
+    "react-native-screens": "~3.18.0",
     "redux-persist": "^6.0.0"
   },
   "devDependencies": {

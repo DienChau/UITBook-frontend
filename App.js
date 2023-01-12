@@ -25,7 +25,7 @@ import { persistor, store } from "./src/redux/store";
 import { PersistGate } from "redux-persist/integration/react";
 
 const Stack = createStackNavigator();
-axios.defaults.baseURL = "http://192.168.170.184:5000";
+axios.defaults.baseURL = "http://192.168.0.108:5000";
 export default function App() {
   // console.log("Hi");
   // const getMoviesFromApiAsync = async () => {
@@ -75,16 +75,16 @@ export default function App() {
               <Stack.Screen name="SignUp" component={SignUpScreen} />
               <Stack.Screen name="TabBottom" component={TabBottom} />
               <Stack.Screen name="DetailBook" component={DetailBook} />
-               <Stack.Screen name="OrderScreen" component={OrderScreen} />
-                <Stack.Screen name="OrderInforScreen" component={OrderInforScreen} />
+              <Stack.Screen name="OrderScreen" component={OrderScreen} />
+              <Stack.Screen
+                name="OrderInforScreen"
+                component={OrderInforScreen}
+              />
             </Stack.Navigator>
           </NavigationContainer>
         </NativeBaseProvider>
       </PersistGate>
     </Provider>
-    
-         
-       
   );
 }
 
