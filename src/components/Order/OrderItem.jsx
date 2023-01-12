@@ -45,16 +45,16 @@ const OrderItem = ({ bookItem }) => {
           <Text fontSize={17} fontWeight={"600"}>
             {bookItem.name}
           </Text>
-          <Text>{bookItem.author}</Text>
-          <View flexDirection={"row"} marginTop={3}>
+          <Text marginBottom={5}>{bookItem.author}</Text>
+          <View flexDirection={"row"} marginTop={3} alignItems={'center'}>
             <Pressable onPress={handlePlus}>
-              <AntDesign name="plussquareo" size={30} color="#40494b" />
+              <AntDesign name="plussquareo" size={24} color="#40494b" />
             </Pressable>
             <Text marginLeft={2} marginRight={2} fontSize={20}>
               {count}
             </Text>
             <Pressable onPress={handleMinus}>
-              <Feather name="minus-square" size={30} color="#40494b" />
+              <Feather name="minus-square" size={24} color="#40494b" />
             </Pressable>
           </View>
         </View>
