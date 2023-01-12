@@ -29,10 +29,13 @@ import products from "../../data/Product";
 import { NumericFormat } from "react-number-format";
 import { useNavigation } from "@react-navigation/native";
 const windowWidth = Dimensions.get("window").width;
-
+// import { useRef } from 'react';
 import Book from "../Book";
 
 const DetailBook = ({ route }) => {
+  //Scroll to TOp
+  const scrollRef = useRef();
+
   const navigation = useNavigation()
   const product = route.params
   const [isFavorite, setFavoriteIcon] = useState(false)
@@ -68,7 +71,7 @@ const DetailBook = ({ route }) => {
   return (
     <View flex={1}>
       <SafeAreaView>
-        <ScrollView height={height1}>
+        <ScrollView ref={scrollRef} height={height1}>
           <View bg={"#CBF0F8"}>
             <View bg={"#fff"}>
               <View
@@ -588,6 +591,129 @@ const DetailBook = ({ route }) => {
               }
 
             </View>
+          </View>
+          <View
+            paddingLeft={5}
+            paddingRight={5}
+            paddingTop={2}
+            paddingBottom={2}
+            bg={"#fff"}
+          >
+            <Text color={"gray.500"} fontWeight={"800"} fontSize={18}>
+              Khám Phá Thêm
+            </Text>
+            <Divider my="2" bg={"gray.500"} />
+            <ScrollView
+              showsHorizontalScrollIndicator={false}
+              paddingBottom={3}
+              paddingTop={3}
+              horizontal={true}
+            >
+              {
+                products.map((item) => (
+                  <View
+                    key={item._id}
+                    style={{
+                      backgroundColor: "#fff",
+                      borderRadius: 10,
+                      marginRight: 12,
+                      marginTop: 3,
+                      marginBottom: 3,
+                      width: (windowWidth - 50) / 2,
+                      padding: 12,
+                      justifyContent: "center",
+                      position: "relative",
+                      shadowColor: "#000",
+                      shadowOffset: {
+                        width: 0,
+                        height: 2,
+                      },
+                      shadowOpacity: 0.23,
+                      shadowRadius: 2.62,
+                      elevation: 4,
+                    }}
+                  >
+                    <TouchableOpacity
+
+                      style={{ position: "absolute", left: 10, top: 10, zIndex: 2 }}
+                    >
+                      <MaterialIcons name={isFavorite ? 'favorite' : 'favorite-outline'} size={26} color={"#E8ABC3"} />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      // onPress={onPressTouch}
+                      onPress={() => {
+                        scrollRef.current?.scrollTo({
+                          y: 0,
+                          animated: true,
+                        });
+                        navigation.navigate("DetailBook", item);
+                        navigation.navigate("DetailBook", item);
+                      }}
+                    >
+                      <View style={{ flexDirection: "row", justifyContent: "center" }}>
+                        <Image
+                          style={{
+                            height: 100,
+                            height: (windowWidth - 70) / 3,
+                            width: (windowWidth - 70) / 3,
+                          }}
+                          resizeMode="contain"
+                          source={{ uri: item.images[0].url }}
+                          alt={item.name}
+                        />
+                      </View>
+                      <View>
+                        <Text
+                          ellipsizeMode="tail"
+                          numberOfLines={2}
+                          style={{
+                            width: "100%",
+                            textAlign: "center",
+                            fontSize: 14,
+                            whiteSpace: "nowrap",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                            lineHeight: 18,
+                            marginTop: 10,
+                          }}
+                        >
+                          {item.name}
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity onPress={() => navigation.navigate("DetailBook", item)} style={{ alignItems: "center", marginTop: 6 }}>
+                      <NumericFormat
+                        value={item.price}
+                        displayType={"text"}
+                        // decimalSeparator={'.'}
+                        thousandSeparator={true}
+                        // thousandSeparator={"."}
+                        suffix={" đ"}
+                        renderText={(value) => (
+                          <Text style={{ color: "#DA2424" }}>{value}</Text>
+                        )}
+                      />
+                    </TouchableOpacity>
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        marginTop: 6,
+                      }}
+                    >
+                      <Text>
+                        Đã bán: <Text>{item.Sold}</Text>
+                      </Text>
+                      <Text>
+                        {item.ratings}
+                        <AntDesign name="star" size={16} color="#fedc00" />
+                      </Text>
+                    </View>
+                  </View>
+                ))
+              }
+            </ScrollView>
           </View>
         </ScrollView>
       </SafeAreaView>
