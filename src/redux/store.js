@@ -14,6 +14,8 @@ import {
   PURGE,
   REGISTER,
 } from "redux-persist";
+import productsSlice from "./slice/productsSlice";
+
 import userSlice from "./slice/userSlice";
 import newProductSlice from "./slice/product/newProductSlice";
 import newsProductsSlice from "./slice/product/newsProductsSlice";
@@ -43,6 +45,7 @@ const reducer = combineReducers({
   newReview: newReviewSlice,
   productReviews: productReviewsSlice,
   review: reviewSlice,
+  products: productsSlice,
 });
 
 const persistedReducer = persistReducer(persistConfig, reducer);

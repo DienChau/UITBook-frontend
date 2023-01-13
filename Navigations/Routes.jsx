@@ -10,6 +10,7 @@ import OrderInforScreen from "../src/screen/OrderInforScreen";
 import OrderScreen from "../src/screen/OrderScreen";
 import SignUpScreen from "../src/screen/SignUpScreen";
 import WelcomeSreen from "../src/screen/WelcomeSreen";
+
 const Stack = createStackNavigator();
 const Routes = () => {
   const { error, loading, isAuthenticated } = useSelector((state) => {
