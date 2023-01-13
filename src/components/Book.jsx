@@ -1,29 +1,27 @@
 import React from "react";
 import {
-  SafeAreaView,
   View,
-  FlatList,
-  StyleSheet,
   Text,
-  StatusBar,
   Image,
   Dimensions,
-  ScrollView,
-  LogBox,
   TouchableOpacity,
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
-// import NumberFormat from 'react-number-format';
-// import NumberFormat from 'react-number-format';
 import { NumericFormat } from "react-number-format";
 import { AntDesign } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+
 const windowWidth = Dimensions.get("window").width;
 
-const Book = (props) => {
+const Book = ({ route }) => {
+  // const navigation = useNavigation()
+  const { id, product } = route.params;
+  console.log('id:', id)
+  console.log('product:', product)
   return (
     <View
       style={{
-        // flex: 1,
+        flex: 1,
         // margin: 20,
         backgroundColor: "#fff",
         borderRadius: 10,
@@ -46,7 +44,7 @@ const Book = (props) => {
       }}
     >
       <TouchableOpacity
-        onPress={props.addFavoriteHandler}
+        // onPress={props.addFavoriteHandler}
         style={{ position: "absolute", left: 10, top: 10, zIndex: 2 }}
       >
         <MaterialIcons name={"favorite-outline"} size={26} color={"#E8ABC3"} />

@@ -15,6 +15,16 @@ import {
   REGISTER,
 } from "redux-persist";
 import userSlice from "./slice/userSlice";
+import newProductSlice from "./slice/product/newProductSlice";
+import newsProductsSlice from "./slice/product/newsProductsSlice";
+import newReviewSlice from "./slice/product/newReviewSlice";
+import productDetailsSlice from "./slice/product/productDetailsSlice";
+import productReviewsSlice from "./slice/product/productReviewsSlice";
+import productSlice from "./slice/product/productSlice";
+// import productsSlice from "./slice/product/productsSlice";
+import reviewSlice from "./slice/product/reviewSlice";
+import ratedProductsSlice from "./slice/product/ratedProductsSlice";
+import popularProductsSlice from "./slice/product/popularProductsSlice";
 
 const persistConfig = {
   key: "root",
@@ -23,6 +33,16 @@ const persistConfig = {
 
 const reducer = combineReducers({
   user: userSlice,
+  // products: productsSlice,
+  product: productSlice,
+  newProduct: newProductSlice,
+  newsProducts: newsProductsSlice,
+  popularProducts: popularProductsSlice,
+  ratedProducts: ratedProductsSlice,
+  productDetails: productDetailsSlice,
+  newReview: newReviewSlice,
+  productReviews: productReviewsSlice,
+  review: reviewSlice,
 });
 
 const persistedReducer = persistReducer(persistConfig, reducer);

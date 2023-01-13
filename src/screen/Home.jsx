@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ScrollView, Text, View, Dimensions, StyleSheet, SafeAreaView, Image, TouchableOpacity } from "react-native"
 import Listbook from "../components/ListBook";
 import BookHorizontal from "../components/BookHorizontal";
@@ -9,46 +9,63 @@ import { Rating } from "react-native-ratings";
 import { MaterialIcons, AntDesign } from "@expo/vector-icons";
 import { NumericFormat } from "react-number-format";
 
-// import products from '../data/Product'
 import { useNavigation } from "@react-navigation/native";
 
-
+import { useDispatch, useSelector } from "react-redux";
+// import { getNewsProducts } from "../../../redux/features/product/newsProductsSlice";
+import { getNewsProducts } from '../redux/slice/product/newsProductsSlice'
+// import { getPopularProducts } from "../../../redux/features/product/popularProductsSlice";
+import { getPopularProducts } from '../redux/slice/product/popularProductsSlice'
+import { getRatedProducts } from '../redux/slice/product/ratedProductsSlice'
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 const baseUrl = "http://192.168.0.108:5000";
 
 const Home = () => {
   const navigation = useNavigation()
-  const [products, setProducts] = React.useState([]);
+  const [allProducts, setProducts] = React.useState([]);
   const [popularBooks, setPopularBooks] = React.useState([]);
 
+  //Call API from redux
+  //get allBook
+  const { error, products } = useSelector((state) => state.ratedProducts);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getRatedProducts());
+  }, [dispatch]);
+
+  //get book popular
+  const { products: popularProducts } = useSelector((state) => state.popularProducts);
+  useEffect(() => {
+    dispatch(getPopularProducts());
+  }, [dispatch]);
   //Call API
-  React.useEffect(() => {
-    // console.log('hello')
-    async function fetchData() {
-      try {
-        const request = await axios.get('/api/v2/books');
-        setProducts(request.data.books);
-        return request.data.books;
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    fetchData();
-  }, []);
-  React.useEffect(() => {
-    // console.log('hello')
-    async function fetchDataPopularBooks() {
-      try {
-        const request = await axios.get('/api/v2/books/popular');
-        setPopularBooks(request.data.books);
-        return request.data.books;
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    fetchDataPopularBooks();
-  }, []);
+  // React.useEffect(() => {
+  //   // console.log('hello')
+  //   async function fetchData() {
+  //     try {
+  //       const request = await axios.get('/api/v2/books');
+  //       setProducts(request.data.books);
+  //       return request.data.books;
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   }
+  //   fetchData();
+  // }, []);
+  // React.useEffect(() => {
+  //   // console.log('hello')
+  //   async function fetchDataPopularBooks() {
+  //     try {
+  //       const request = await axios.get('/api/v2/books/popular');
+  //       setPopularBooks(request.data.books);
+  //       return request.data.books;
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   }
+  //   fetchDataPopularBooks();
+  // }, []);
   return (
 
     <ScrollView style={{ backgroundColor: '#CBF0F8', flex: 1, padding: 10, paddingTop: 0 }}>
@@ -101,7 +118,10 @@ const Home = () => {
                   <MaterialIcons name={'favorite-outline'} size={26} color={"#E8ABC3"} />
                 </TouchableOpacity>
                 <TouchableOpacity
-                  onPress={() => navigation.navigate("DetailBook", product)}
+                  // onPress={() => navigation.navigate("DetailBook", product)}
+                  onPress={() => {
+                    navigation.navigate('DetailBook', { id: product._id, product });
+                  }}
                 >
                   <View style={{ flexDirection: "row", justifyContent: "center" }}>
                     <Image
@@ -196,7 +216,7 @@ const Home = () => {
         </View>
         <View style={{ marginBottom: 24 }}>
           {
-            popularBooks.map((product) => (
+            popularProducts.map((product) => (
               <View
                 key={product._id}
                 style={[

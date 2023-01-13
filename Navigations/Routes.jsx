@@ -2,6 +2,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import React from "react";
 import { useSelector } from "react-redux";
+import Book from "../src/components/Book";
 import DetailBook from "../src/components/BookDetail/DetailBook";
 import TabBottom from "../src/components/TabBottom";
 import LogIn from "../src/screen/LogIn";
@@ -22,6 +23,7 @@ const Routes = () => {
           <>
             <Stack.Screen name="TabBottom" component={TabBottom} />
             <Stack.Screen name="DetailBook" component={DetailBook} />
+            <Stack.Screen name="Booktest" component={Book} />
             <Stack.Screen name="OrderScreen" component={OrderScreen} />
             <Stack.Screen
               name="OrderInforScreen"

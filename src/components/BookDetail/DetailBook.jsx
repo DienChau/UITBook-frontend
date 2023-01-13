@@ -1,5 +1,18 @@
 import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
+
+// import { useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  clearErrorsDetails,
+  getProductDetails,
+} from '../../redux/slice/product/productDetailsSlice'
+import {
+  clearErrorsReview,
+  newReview,
+  resetStateReview,
+} from '../../redux/slice/product/newReviewSlice'
+
 import {
   Avatar,
   Box,
@@ -26,19 +39,19 @@ import { MaterialIcons, AntDesign } from "@expo/vector-icons";
 import { Rating } from "react-native-ratings";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
-import products from "../../data/Product";
 import { NumericFormat } from "react-number-format";
+import moment from "moment";
 import { useNavigation } from "@react-navigation/native";
 const windowWidth = Dimensions.get("window").width;
-// import { useRef } from 'react';
-import Book from "../Book";
 
 const DetailBook = ({ route }) => {
   //Scroll to TOp
   const scrollRef = useRef();
   //navigation
   const navigation = useNavigation()
-  const product = route.params
+  // const { id, product: productBook } = route.params;
+  const { id } = route.params;
+
   //State
   const [heart, setHeart] = useState(false);
   const [count, setcount] = useState(1);
@@ -80,6 +93,76 @@ const DetailBook = ({ route }) => {
     }
     fetchDataNewBooks();
   }, []);
+
+  //Handle review
+  // const { id } = useParams();
+  const dispatch = useDispatch();
+  const { loading, error, product: productBook } = useSelector(
+    (state) => state.productDetails
+  );
+  const { success, error: reviewError } = useSelector(
+    (state) => state.newReview
+  );
+
+  const [rating, setRating] = useState(0);
+  const [comment, setComment] = useState("");
+
+  const ratingCompleted = (rating) => {
+    setRating(rating)
+  }
+
+  const { user } = useSelector((state) => state.user);
+
+  const reviewSubmitHandler = () => {
+    setShowModal(false);
+    const myForm = new FormData();
+    myForm.append("rating", rating);
+    myForm.append("comment", comment);
+    myForm.append("bookId", id);
+    // console.log("comment", comment, "rating", rating);
+    console.log("myForm", myForm);
+    dispatch(newReview(myForm));
+    setComment("");
+  };
+
+
+  useEffect(() => {
+    dispatch(getProductDetails(id));
+  }, [dispatch, id]);
+
+  useEffect(() => {
+    if (error) {
+      alert(error);
+      dispatch(clearErrorsDetails());
+    }
+    if (!success && reviewError) {
+      // toast.error(`${reviewError}`, {
+      //   position: "top-center",
+      //   autoClose: 5000,
+      //   hideProgressBar: false,
+      //   closeOnClick: true,
+      //   pauseOnHover: true,
+      //   draggable: true,
+      //   progress: undefined,
+      // });
+      console.log(reviewError);
+      dispatch(clearErrorsReview());
+      dispatch(getProductDetails(id));
+    } else if (success) {
+      // toast.success("Thêm review sách thành công! 🎊", {
+      //   position: "bottom-center",
+      //   autoClose: 5000,
+      //   hideProgressBar: false,
+      //   closeOnClick: true,
+      //   pauseOnHover: true,
+      //   draggable: true,
+      //   progress: undefined,
+      // });
+      console.log(success);
+      dispatch(resetStateReview());
+      dispatch(getProductDetails(id));
+    }
+  }, [dispatch, error, alert, reviewError, success]);
 
   const listImage = [
     "https://th.bing.com/th/id/OIP.zGTaQ-khcMHfsHm4IZqYsgHaHa?pid=ImgDet&w=1000&h=1000&rs=1",
@@ -148,7 +231,7 @@ const DetailBook = ({ route }) => {
                   sliderHeight={500}
                   layout={"tinder"}
                   // data={products}
-                  data={product.images}
+                  data={productBook.images}
                   itemWidth={Dimensions.get("screen").width}
                   itemHeight={500}
                   renderItem={(item, index) => {
@@ -166,7 +249,7 @@ const DetailBook = ({ route }) => {
                             // uri: product.image
                             uri: item.item.url,
                           }}
-                          alt={product.name}
+                          alt={productBook.name}
                         ></Image>
                       </View>
                     );
@@ -211,7 +294,7 @@ const DetailBook = ({ route }) => {
               alignItems={"center"}
             >
               <NumericFormat
-                value={product.price}
+                value={productBook.price}
                 displayType={"text"}
                 // decimalSeparator={'.'}
                 thousandSeparator={true}
@@ -229,11 +312,11 @@ const DetailBook = ({ route }) => {
               <View flexDirection={"row"}>
                 <Rating
                   imageSize={20}
-                  ratingCount={product.ratings}
+                  ratingCount={productBook.ratings}
                   readonly={true}
-                  startingValue={product.ratings}
+                  startingValue={productBook.ratings}
                 />
-                <Text marginLeft={4}>Đã bán <Text>{product.Sold}</Text></Text>
+                <Text marginLeft={4}>Đã bán <Text>{productBook.Sold}</Text></Text>
               </View>
             </View>
             <View
@@ -244,12 +327,12 @@ const DetailBook = ({ route }) => {
               paddingBottom={2}
             >
               <Text color={"#208AED"} fontSize={18} fontWeight={"700"}>
-                {product.name}
+                {productBook.name}
                 {/* Không Ai Có Thể Làm Bạn Tổn Thương Trừ Khi Bạn Cho Phép */}
               </Text>
               <View flexDirection={"row"} marginTop={2}>
                 <FontAwesome5 name="user-edit" size={18} color="#208AED" />
-                <Text>Tác giả: <Text style={{ color: 'red' }}>{product.author}</Text></Text>
+                <Text>Tác giả: <Text style={{ color: 'red' }}>{productBook.author}</Text></Text>
               </View>
             </View>
             <View
@@ -437,7 +520,7 @@ const DetailBook = ({ route }) => {
                   <Text fontSize={15} w={200}>
                     Số trang
                   </Text>
-                  <Text fontSize={15}>{product.pageNumber}</Text>
+                  <Text fontSize={15}>{productBook.pageNumber}</Text>
                 </View>
                 <View
                   paddingLeft={5}
@@ -450,7 +533,7 @@ const DetailBook = ({ route }) => {
                   <Text fontSize={15} w={200}>
                     Nhà xuất bản
                   </Text>
-                  <Text fontSize={15}>{product.publisher}</Text>
+                  <Text fontSize={15}>{productBook.publisher}</Text>
                 </View>
               </View>
             </View>
@@ -463,13 +546,7 @@ const DetailBook = ({ route }) => {
               </View>
 
               <Text paddingLeft={5} paddingRight={5}>
-                {product.description}
-                {/* KHÔNG AI CÓ THỂ LÀM BẠN TỔN THƯƠNG TRỪ KHI BẠN CHO PHÉP – YOO
-                EUN JUNG Chúng ta vẫn thường nghĩ mình sẽ chỉ hạnh phúc khi ở
-                bên cạnh ai đó và nhận được yêu thương từ họ. Nhưng thực chất,
-                hạnh phúc đơn giản chỉ là biết trân trọng bản thân và tận hưởng
-                niềm vui trong chính cuộc sống mà bạn mong ước. Vậy nên, hãy nhớ
-                rằng không ai có thể làm bạn tổn thương, trừ khi bạn cho phép. */}
+                {productBook.description}
               </Text>
             </View>
             <View marginTop={5} bg={"#fff"} paddingTop={2} paddingBottom={2}>
@@ -505,7 +582,12 @@ const DetailBook = ({ route }) => {
                     >
                       Đánh giá sản phẩm
                     </Text>
-                    <Rating imageSize={25} ratingCount={5} startingValue={5} />
+                    <Rating
+                      imageSize={25}
+                      ratingCount={5}
+                      startingValue={rating}
+                      onFinishRating={ratingCompleted}
+                    />
                   </View>
                   <View
                     paddingLeft={5}
@@ -517,6 +599,10 @@ const DetailBook = ({ route }) => {
                       Bình luận
                     </Text>
                     <Input
+                      value={comment}
+                      onChangeText={(comment) => {
+                        setComment(comment);
+                      }}
                       variant="outline"
                       placeholder="Underlined"
                       InputLeftElement={
@@ -550,9 +636,10 @@ const DetailBook = ({ route }) => {
                         Hủy
                       </Button>
                       <Button
-                        onPress={() => {
-                          setShowModal(false);
-                        }}
+                        onPress={reviewSubmitHandler}
+                      // onPress={() => {
+                      //   setShowModal(false);
+                      // }}
                       >
                         Thêm
                       </Button>
@@ -562,50 +649,58 @@ const DetailBook = ({ route }) => {
               </Modal>
               <Divider my="2" bg={"gray.500"} />
               {
-                product.reviews.map(review => (
-                  <View
-                    paddingLeft={5}
-                    paddingRight={5}
-                    flexDirection={"row"}
-                    justifyContent="space-between"
-                    marginBottom={5}
-                  >
-                    <View flexDirection={"row"}>
-                      <Image
-                        style={{
-                          width: 50,
-                          height: 50,
-                          resizeMode: "stretch",
-                          marginRight: 10,
-                          marginTop: 5,
-                          borderRadius: 50,
-                        }}
-                        source={{
-                          uri: "https://th.bing.com/th/id/OIP.zGTaQ-khcMHfsHm4IZqYsgHaHa?pid=ImgDet&w=1000&h=1000&rs=1",
-                        }}
-                      ></Image>
-                      <View>
-                        <Text fontSize={18} fontWeight={700}>
-                          {review.name}
-                          {/* Diễn Châu */}
-                        </Text>
-                        <Rating
-                          imageSize={15}
-                          ratingCount={5}
-                          readonly={true}
-                          startingValue={review.rating}
-                        />
-                        <Text>{review.comment}</Text>
+                productBook.reviews.map(review => (
+                  <>
+                    <View
+                      key={review._id}
+                      paddingLeft={5}
+                      paddingRight={5}
+                      flexDirection={"row"}
+                      justifyContent='space-between'
+                      marginBottom={3}
+                      marginTop={3}
+                    >
+                      <View flexDirection={"row"} style={{}}>
+                        <Image
+                          style={{
+                            width: 50,
+                            height: 50,
+                            resizeMode: "stretch",
+                            marginRight: 10,
+                            marginTop: 5,
+                            borderRadius: 50,
+                          }}
+                          source={{
+                            uri: "https://th.bing.com/th/id/OIP.zGTaQ-khcMHfsHm4IZqYsgHaHa?pid=ImgDet&w=1000&h=1000&rs=1",
+                          }}
+                          alt='avater'
+                        ></Image>
+                        <View style={{ justifyContent: 'flex-start', alignItems: 'flex-start' }}>
+                          <Text fontSize={18} fontWeight={700} marginBottom={1}>
+                            {review.name}
+                            {/* Diễn Châu */}
+                          </Text>
+                          <Rating
+                            imageSize={15}
+                            ratingCount={5}
+                            readonly={true}
+                            startingValue={review.rating}
+                          />
+                          <Text style={{ flexWrap: 'wrap', width: 200, marginTop: 2 }}>{review.comment}</Text>
+                        </View>
                       </View>
-                    </View>
+                      <View>
+                        <Text>
+                          {/* {review.time} */}
+                          {moment(review.time).format("DD/MM/YYYY")}
+                          {/* 8/1/2023 | 11:30 */}
+                        </Text>
+                      </View>
 
-                    <View>
-                      <Text>
-                        {review.time}
-                        {/* 8/1/2023 | 11:30 */}
-                      </Text>
+
                     </View>
-                  </View>
+                    <Divider my="1" style={{ backgroundColor: '#eee' }} />
+                  </>
                 ))
               }
 
