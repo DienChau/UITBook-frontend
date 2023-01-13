@@ -1,4 +1,4 @@
-import React from "react";
+// import React from "react";
 import {
   View,
   Text,
@@ -10,14 +10,33 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { NumericFormat } from "react-number-format";
 import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import React, { useEffect, useRef, useState } from "react";
+import axios from "axios";
 
+// import { useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  clearErrorsDetails,
+  getProductDetails,
+} from '../redux/slice/product/productDetailsSlice'
+import {
+  clearErrorsReview,
+  newReview,
+  resetStateReview,
+} from '../redux/slice/product/newReviewSlice'
 const windowWidth = Dimensions.get("window").width;
 
 const Book = ({ route }) => {
   // const navigation = useNavigation()
   const { id, product } = route.params;
-  console.log('id:', id)
-  console.log('product:', product)
+  // console.log('id:', id)
+  // console.log('product:', product)
+  const dispatch = useDispatch();
+  const { loading, error, product: productBook } = useSelector(
+    (state) => state.productDetails
+  );
+  console.log('productBook:', productBook)
+
   return (
     <View
       style={{

@@ -240,7 +240,9 @@ const Home = () => {
                   <MaterialIcons name={'favorite-outline'} size={26} color={"#E8ABC3"} />
                 </TouchableOpacity>
                 <TouchableOpacity
-                  onPress={() => navigation.navigate("DetailBook", product)}
+                  onPress={() => {
+                    navigation.navigate('DetailBook', { id: product._id, product });
+                  }}
                   style={{ flexDirection: "row", justifyContent: "center", flex: 4 }}
                 >
                   <Image
@@ -257,7 +259,9 @@ const Home = () => {
                 <View
                   style={{ flex: 5, justifyContent: "center", alignItems: "stretch" }}
                 >
-                  <TouchableOpacity onPress={() => navigation.navigate("DetailBook", product)}>
+                  <TouchableOpacity onPress={() => {
+                    navigation.navigate('DetailBook', { id: product._id, product });
+                  }}>
                     <Text
                       ellipsizeMode="tail"
                       numberOfLines={2}
@@ -273,7 +277,9 @@ const Home = () => {
                       {product.name}
                     </Text>
                   </TouchableOpacity>
-                  <TouchableOpacity onPress={() => navigation.navigate("DetailBook", product)} style={{ alignItems: "flex-start", marginTop: 6 }}>
+                  <TouchableOpacity onPress={() => {
+                    navigation.navigate('DetailBook', { id: product._id, product });
+                  }} style={{ alignItems: "flex-start", marginTop: 6 }}>
                     <NumericFormat
                       value={product.price}
                       displayType={"text"}

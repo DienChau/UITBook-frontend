@@ -28,7 +28,7 @@ const productsSlice = createSlice({
       })
       .addCase(getProduct.rejected, (state, action) => {
         state.loading = false;
-        console.log("action", action.payload);
+        // console.log("action", action.payload);
         // console.log("rejected");
       });
   },
@@ -63,7 +63,7 @@ export const getProduct = createAsyncThunk(
         console.log(err.response.data);
         return err.response.data;
       });
-    console.log("products/getProduct", data);
+    // console.log("products/getProduct", data);
     return data;
   }
 );

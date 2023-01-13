@@ -376,7 +376,8 @@ const Books = () => {
                       Đã bán: <Text>{product.Sold}</Text>
                     </Text>
                     <Text>
-                      {product.ratings}
+                      {Math.floor(product.ratings * 10) / 10}
+                      {/* {product.ratings} */}
                       <AntDesign name="star" size={16} color="#fedc00" />
                     </Text>
                   </View>
