@@ -55,7 +55,7 @@ const Books = () => {
   const [isFavorite, setFavoriteIcon] = useState(false);
   const addFavoriteHandler = (id) => {
     const match = products.find((product) => product._id === id);
-    console.log(match);
+    // console.log(match);
     if (match) {
       setFavoriteIcon(!isFavorite);
     }
@@ -206,9 +206,9 @@ const Books = () => {
     keyword = "";
   };
   useEffect(() => {
-    console.log("cate:", category);
-    console.log("cate:", author);
-    console.log("cate:", publisher);
+    // console.log("cate:", category);
+    // console.log("cate:", author);
+    // console.log("cate:", publisher);
     const initPrice = price * 10000;
     if (!keyword) keyword = "";
     const infoData = {
@@ -393,7 +393,7 @@ const Books = () => {
                         productsCount / numberOfItemsPerPage
                       )}
                       onPageChange={(page) => {
-                        console.log("page:", page);
+                        // console.log("page:", page);
                         setPage(page);
                       }}
                       showFastPaginationControls
@@ -565,7 +565,7 @@ const Books = () => {
                     w="100%"
                     step={10}
                     onChange={(v) => {
-                      console.log("price", v);
+                      // console.log("price", v);
                       setPrice(v);
                     }}
                   >

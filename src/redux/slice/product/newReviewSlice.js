@@ -22,14 +22,14 @@ export const newReview = createAsyncThunk(
     // return data.success;
     const data = await ProductDataService.createNewReview(reviewData)
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         return res.data;
       })
       .catch((err) => {
         console.log(err);
         return err.response.data;
       });
-    console.log("new review:", data);
+    // console.log("new review:", data);
     return data;
   }
 );

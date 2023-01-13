@@ -15,10 +15,10 @@ const productsSlice = createSlice({
     builder
       .addCase(getProduct.pending, (state, action) => {
         state.loading = true;
-        console.log("pending");
+        // console.log("pending");
       })
       .addCase(getProduct.fulfilled, (state, action) => {
-        console.log("fulfilled");
+        // console.log("fulfilled");
         state.loading = false;
         state.products = action.payload.books;
         state.productsCount = action.payload.booksCount;
@@ -29,7 +29,7 @@ const productsSlice = createSlice({
       .addCase(getProduct.rejected, (state, action) => {
         state.loading = false;
         console.log("action", action.payload);
-        console.log("rejected");
+        // console.log("rejected");
       });
   },
 });
@@ -56,7 +56,7 @@ export const getProduct = createAsyncThunk(
       publisher
     )
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         return res.data;
       })
       .catch((err) => {

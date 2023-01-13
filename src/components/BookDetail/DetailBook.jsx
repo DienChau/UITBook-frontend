@@ -58,9 +58,9 @@ const DetailBook = ({ route }) => {
   const [showModal, setShowModal] = useState(false);
   const height1 = Dimensions.get("screen").height - 120;
   const button = useRef();
-  useEffect(() => {
-    console.log(button.current.height);
-  }, []);
+  // useEffect(() => {
+  //   console.log(button.current.height);
+  // }, []);
 
   //Call API
   const [newBooks, setNewBooks] = React.useState([]);
@@ -120,7 +120,7 @@ const DetailBook = ({ route }) => {
     myForm.append("comment", comment);
     myForm.append("bookId", id);
     // console.log("comment", comment, "rating", rating);
-    console.log("myForm", myForm);
+    // console.log("myForm", myForm);
     dispatch(newReview(myForm));
     setComment("");
   };
@@ -158,7 +158,7 @@ const DetailBook = ({ route }) => {
       //   draggable: true,
       //   progress: undefined,
       // });
-      console.log(success);
+      // console.log(success);
       dispatch(resetStateReview());
       dispatch(getProductDetails(id));
     }
