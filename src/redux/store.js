@@ -14,6 +14,8 @@ import {
   PURGE,
   REGISTER,
 } from "redux-persist";
+import productsSlice from "./slice/productsSlice";
+
 import userSlice from "./slice/userSlice";
 
 const persistConfig = {
@@ -23,6 +25,7 @@ const persistConfig = {
 
 const reducer = combineReducers({
   user: userSlice,
+  products: productsSlice,
 });
 
 const persistedReducer = persistReducer(persistConfig, reducer);
