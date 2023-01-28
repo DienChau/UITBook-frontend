@@ -5,6 +5,7 @@ import logo from "../../assets/logo.png";
 import { FontAwesome } from "@expo/vector-icons";
 // import { Pressable, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { useSelector } from "react-redux";
 
 const Header = () => {
   const navigation = useNavigation();
@@ -15,6 +16,8 @@ const Header = () => {
     navigation.navigate("Category", keyword);
     setKeyword("");
   };
+  const productCart = useSelector((state) => state.cart.cartItems);
+  let quantity = productCart.length !== 0 ? productCart.length : 0;
   return (
     <View
       style={{
@@ -73,20 +76,24 @@ const Header = () => {
         alignItems="center"
       >
         <FontAwesome name="shopping-basket" size={24} color="#888" />
-        <Box
-          px={1}
-          rounded="full"
-          position="absolute"
-          top={1}
-          left={10}
-          bg={"#E72A2A"}
-          _text={{
-            color: "#fff",
-            fontSize: "11px",
-          }}
-        >
-          5
-        </Box>
+        {quantity == 0 ? (
+          <></>
+        ) : (
+          <Box
+            px={1}
+            rounded="full"
+            position="absolute"
+            top={1}
+            left={10}
+            bg={"#E72A2A"}
+            _text={{
+              color: "#fff",
+              fontSize: "11px",
+            }}
+          >
+            {quantity}
+          </Box>
+        )}
       </Pressable>
       {/* </TouchableOpacity> */}
     </View>

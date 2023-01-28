@@ -69,6 +69,7 @@ class ProductDataService {
     return axios.delete(`/api/v2/book/${id}`);
   }
   getDetailBook(id) {
+    console.log("id: ", id);
     return axios.get(`/api/v2/book/${id}`);
   }
   createNewReview(reviewData) {

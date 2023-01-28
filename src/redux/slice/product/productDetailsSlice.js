@@ -17,11 +17,11 @@ export const getProductDetails = createAsyncThunk(
     // return data.book;
     const data = await ProductDataService.getDetailBook(id)
       .then((res) => {
-        // console.log(res.data);
+        console.log(res.data);
         return res.data;
       })
       .catch((err) => {
-        // console.log(err.response.data);
+        console.log(err);
         return err.response.data;
       });
     return data;
