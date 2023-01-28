@@ -27,7 +27,7 @@ import Routes from "./Navigations/Routes";
 
 const Stack = createStackNavigator();
 // axios.defaults.baseURL = "http://192.168.170.184:5000";
-axios.defaults.baseURL = "http://192.168.0.108:5000";
+axios.defaults.baseURL = "http://192.168.0.110:5000";
 export default function App() {
   // console.log("Hi");
   // const getMoviesFromApiAsync = async () => {
