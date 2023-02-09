@@ -10,6 +10,7 @@ import {
   Button,
   Pressable,
   ScrollView,
+  ToastAndroid,
 } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
@@ -23,12 +24,15 @@ import {
   apiGetPublicProvinces,
   apiGetPublicVillage,
 } from "../redux/services/locationApi";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
+import { saveShippingInfo } from "../redux/slice/cartSlice";
+import { creatOrder } from "../redux/slice/newOrderSlice";
 
 // import DateTimePicker from '@react-native-community/datetimepicker';
 
 const OrderInforScreen = () => {
+  const dispatch = useDispatch();
   const [checked, setChecked] = React.useState("first");
   //   const [state, setState] = React.useState("first");
   //   const [value, setValue] = React.useState("first");
@@ -39,8 +43,16 @@ const OrderInforScreen = () => {
   const [districts, setDistricts] = useState([]);
   const [villages, setVillages] = useState([]);
   const [village, setVillage] = useState();
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+  const [address, setAddress] = useState("");
+  // const [order, setOrder] = useState({});
+
   const orderItem = useSelector((state) => state.cart.cartItems);
-  console.log(orderItem);
+  const user = useSelector((state) => state.user.user);
+
+  const shippingInfo = useSelector((state) => state.cart.shippingInfo);
+
   useEffect(() => {
     const fetchPublicProviecs = async () => {
       const response = await apiGetPublicProvinces();
@@ -65,7 +77,7 @@ const OrderInforScreen = () => {
   }, [province]);
   useEffect(() => {
     setVillage(null);
-    setDistrict(null);
+    // setDistrict(null);
     const fetchPublicDistrict = async () => {
       const response = await apiGetPublicVillage(district.id);
 
@@ -76,9 +88,48 @@ const OrderInforScreen = () => {
     province && fetchPublicDistrict();
   }, [district]);
 
-  const InforPersonHandler = () => {};
-
-  const orderHandler = () => {};
+  const InforPersonHandler = () => {
+    if ((phone === "" || email === "", address === "")) {
+      ToastAndroid.show("Vui lòng điền đầy đủ thông tin", ToastAndroid.SHORT);
+      return;
+    }
+    if (phone.length < 10) {
+      ToastAndroid.show("Số điện thoại không hợp lệ", ToastAndroid.SHORT);
+      return;
+    }
+    if (
+      !email.match(
+        /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      )
+    ) {
+      ToastAndroid.show("Email không hợp lệ", ToastAndroid.SHORT);
+      return;
+    }
+    dispatch(
+      saveShippingInfo({
+        address: address,
+        phone: phone,
+        email: email,
+        city: province.name,
+        district: district.name,
+        ward: village.name,
+      })
+    );
+    navigation.navigate("finalOrderScreen");
+  };
+  // useEffect(() => {
+  //   const paymentInfo = {
+  //     method: "COD",
+  //     status: "succeeded",
+  //     id: "",
+  //   };
+  //   setOrder({
+  //     orderItems: orderItem,
+  //     user: user,
+  //     shippingInfo: shippingInfo,
+  //     paymentInfo: paymentInfo,
+  //   });
+  // }, [orderItem, shippingInfo, user]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -132,6 +183,8 @@ const OrderInforScreen = () => {
                 SĐT người nhận <Text style={{ color: "red" }}>*</Text>
               </Text>
               <TextInput
+                value={phone}
+                onChangeText={setPhone}
                 style={styles.input}
                 underlineColorAndroid="transparent"
                 placeholderTextColor="#9a73ef"
@@ -177,6 +230,8 @@ const OrderInforScreen = () => {
                 Địa chỉ <Text style={{ color: "red" }}>*</Text>
               </Text>
               <TextInput
+                onChangeText={setAddress}
+                value={address}
                 style={styles.input}
                 underlineColorAndroid="transparent"
                 placeholderTextColor="#9a73ef"
@@ -188,13 +243,15 @@ const OrderInforScreen = () => {
                 Gmail <Text style={{ color: "red" }}>*</Text>
               </Text>
               <TextInput
+                onChangeText={setEmail}
+                value={email}
                 style={styles.input}
                 underlineColorAndroid="transparent"
                 placeholderTextColor="#9a73ef"
                 autoCapitalize="none"
               />
             </View>
-            <View style={{ alignItems: "center", marginBottom: 20 }}>
+            {/* <View style={{ alignItems: "center", marginBottom: 20 }}>
               <TouchableOpacity
                 style={{
                   alignItems: "center",
@@ -210,7 +267,7 @@ const OrderInforScreen = () => {
                   Lưu
                 </Text>
               </TouchableOpacity>
-            </View>
+            </View> */}
           </View>
           <View style={styles.payment}>
             <Text
@@ -243,7 +300,7 @@ const OrderInforScreen = () => {
                 onPress={() => setChecked("second")}
               />
               <Text onPress={() => setChecked("second")}>
-                Thanh toán khi nhận hàng
+                Thanh toán qua thẻ ngân hàng
               </Text>
             </TouchableOpacity>
             {/* <View>
@@ -253,150 +310,12 @@ const OrderInforScreen = () => {
                             </RadioButton.Group>
                         </View> */}
           </View>
-          <View
-            style={{
-              backgroundColor: "#fff",
-              marginVertical: 10,
-              padding: 10,
-              borderRadius: 10,
-            }}
-          >
-            <Text style={{ fontSize: 16, marginBottom: 5, fontWeight: "bold" }}>
-              Đơn hàng của bạn
-            </Text>
-            <View
-              style={{
-                borderBottomColor: "#ccc",
-                borderBottomWidth: 0.5,
-              }}
-            />
-            {orderItem?.map((item) => {
-              console.log(item.image);
-              return (
-                <>
-                  <View
-                    key={item.book}
-                    style={{
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                      marginBottom: 10,
-                      marginTop: 5,
-                    }}
-                  >
-                    <View style={{ flex: 1 }}>
-                      <Image
-                        style={{ width: 100, height: 100 }}
-                        source={{ uri: item.image }}
-                      />
-                    </View>
-                    <View style={{ flex: 2, marginHorizontal: 10 }}>
-                      <Text>
-                        {item.name}
-                        {/* Thiên Tài Bên Trái, Kẻ Điên Bên Phải (Tái Bản) */}
-                      </Text>
-                      <Text>SL: {item.quantity}</Text>
-                    </View>
-                    <View style={{}}>
-                      <NumericFormat
-                        value={item.price}
-                        displayType={"text"}
-                        // decimalSeparator={'.'}
-                        thousandSeparator={true}
-                        // thousandSeparator={"."}
-                        suffix={" đ"}
-                        renderText={(value) => (
-                          <Text style={{ color: "black" }}>{value}</Text>
-                        )}
-                      />
-                    </View>
-                  </View>
-                </>
-              );
-            })}
 
-            <View
-              style={{
-                borderBottomColor: "#ccc",
-                borderBottomWidth: 0.5,
-              }}
-            />
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                marginVertical: 10,
-              }}
-            >
-              <Text>Tổng tiền hàng</Text>
-              <NumericFormat
-                value={109980}
-                displayType={"text"}
-                // decimalSeparator={'.'}
-                thousandSeparator={true}
-                // thousandSeparator={"."}
-                suffix={" đ"}
-                renderText={(value) => (
-                  <Text style={{ color: "black" }}>{value}</Text>
-                )}
-              />
-            </View>
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                marginVertical: 10,
-              }}
-            >
-              <Text>Phí vận chuyển</Text>
-              <NumericFormat
-                value={0}
-                displayType={"text"}
-                // decimalSeparator={'.'}
-                thousandSeparator={true}
-                // thousandSeparator={"."}
-                suffix={" đ"}
-                renderText={(value) => (
-                  <Text style={{ color: "black" }}>{value}</Text>
-                )}
-              />
-            </View>
-            <View
-              style={{
-                borderBottomColor: "#ccc",
-                borderBottomWidth: 0.5,
-              }}
-            />
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                marginVertical: 10,
-              }}
-            >
-              <Text
-                style={{ fontSize: 16, color: "#F02929", fontWeight: "bold" }}
-              >
-                Tổng thanh toán
-              </Text>
-              <NumericFormat
-                value={109980}
-                displayType={"text"}
-                // decimalSeparator={'.'}
-                thousandSeparator={true}
-                // thousandSeparator={"."}
-                suffix={" đ"}
-                renderText={(value) => (
-                  <Text style={{ color: "#F02929", fontWeight: "bold" }}>
-                    {value}
-                  </Text>
-                )}
-              />
-            </View>
-          </View>
-          <View style={{ alignItems: "center", marginBottom: 20 }}>
+          <View
+            style={{ marginTop: 20, alignItems: "center", marginBottom: 20 }}
+          >
             <Pressable
-              onPress={orderHandler}
+              onPress={InforPersonHandler}
               hitSlop={{ top: 10, bottom: 10, right: 10, left: 10 }}
               android_ripple={{ color: "#f0f" }}
               style={({ pressed }) => [
@@ -414,7 +333,7 @@ const OrderInforScreen = () => {
                   textAlign: "center",
                 }}
               >
-                Đặt hàng
+                Tiếp tục
               </Text>
             </Pressable>
           </View>

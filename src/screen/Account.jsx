@@ -17,7 +17,7 @@ import { AntDesign } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
-import AvatarImage from "../../assets/avatar.jpg";
+
 import { Feather } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
@@ -64,6 +64,9 @@ const Account = () => {
   const dispatch = useDispatch();
   const handleLogOut = () => {
     dispatch(logoutRequest());
+  };
+  const handleWatchedProduct = () => {
+    navigation.navigate("WatchedProduct");
   };
 
   return (
@@ -333,33 +336,36 @@ const Account = () => {
                 Trung tâm trợ giúp
               </Text>
             </View>
-            <View
-              style={{
-                flexDirection: "row",
-                backgroundColor: "#fff",
-                alignItems: "center",
-                paddingLeft: 20,
-                marginBottom: 10,
-                paddingVertical: 6,
-              }}
-            >
+            <Pressable onPress={handleWatchedProduct}>
               <View
                 style={{
-                  backgroundColor: "#E8ABC3",
-                  borderRadius: 50,
-                  padding: 8,
+                  flexDirection: "row",
+                  backgroundColor: "#fff",
+                  alignItems: "center",
+                  paddingLeft: 20,
+                  marginBottom: 10,
+                  paddingVertical: 6,
                 }}
               >
-                <MaterialCommunityIcons
-                  name="clock-outline"
-                  size={24}
-                  color="#fff"
-                />
+                <View
+                  style={{
+                    backgroundColor: "#E8ABC3",
+                    borderRadius: 50,
+                    padding: 8,
+                  }}
+                >
+                  <MaterialCommunityIcons
+                    name="clock-outline"
+                    size={24}
+                    color="#fff"
+                  />
+                </View>
+                <Text style={{ marginLeft: 10, fontSize: 16 }}>
+                  Đã xem gần đây
+                </Text>
               </View>
-              <Text style={{ marginLeft: 10, fontSize: 16 }}>
-                Đã xem gần đây
-              </Text>
-            </View>
+            </Pressable>
+
             <View
               style={{
                 flexDirection: "row",

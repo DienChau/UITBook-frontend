@@ -28,6 +28,8 @@ import reviewSlice from "./slice/product/reviewSlice";
 import ratedProductsSlice from "./slice/product/ratedProductsSlice";
 import popularProductsSlice from "./slice/product/popularProductsSlice";
 import cartSlice from "./slice/cartSlice";
+import newOrderSlice from "./slice/newOrderSlice";
+import watchedProduct from "./slice/product/watchedProduct";
 
 const persistConfig = {
   key: "root",
@@ -48,6 +50,8 @@ const reducer = combineReducers({
   review: reviewSlice,
   products: productsSlice,
   cart: cartSlice,
+  order: newOrderSlice,
+  productWatched: watchedProduct,
 });
 
 const persistedReducer = persistReducer(persistConfig, reducer);
