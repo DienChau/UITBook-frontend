@@ -14,7 +14,7 @@ import { Pressable } from "react-native";
 import { SwipeListView } from "react-native-swipe-list-view";
 import OrderItem from "./OrderItem";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import question from "../../../assets/question.gif";
+
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import { clearCartItem, removeCartItem } from "../../redux/slice/cartSlice";

@@ -4,7 +4,7 @@ const cartSlice = createSlice({
   name: "CartSlice",
   initialState: {
     cartItems: [],
-    shippinginfo: {},
+    shippingInfo: {},
   },
   reducers: {
     addToCart(state, action) {
@@ -39,9 +39,10 @@ const cartSlice = createSlice({
       };
     },
     saveShippingInfo(state, action) {
+      console.log("actionInfo", action.payload);
       return {
         ...state,
-        shippinginfo: action.payload,
+        shippingInfo: action.payload,
       };
     },
     clearCartItem(state, action) {

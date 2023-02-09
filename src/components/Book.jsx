@@ -11,17 +11,26 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   clearErrorsDetails,
   getProductDetails,
-} from '../redux/slice/product/productDetailsSlice'
+} from "../redux/slice/product/productDetailsSlice";
 import {
   clearErrorsReview,
   newReview,
   resetStateReview,
-} from '../redux/slice/product/newReviewSlice'
+} from "../redux/slice/product/newReviewSlice";
+import { addWatchedProduct } from "../redux/slice/product/watchedProduct";
 const windowWidth = Dimensions.get("window").width;
-
 const Book = ({ product }) => {
+  const dispatch = useDispatch();
   const navigation = useNavigation();
 
+  const handleClick = () => {
+    dispatch(
+      addWatchedProduct({
+        ...product,
+      })
+    );
+    navigation.navigate("DetailBook", { id: product._id, product });
+  };
   // const { id, product } = route.params;
   // console.log('id:', id)
   // console.log('product:', product)
@@ -56,11 +65,7 @@ const Book = ({ product }) => {
       >
         <MaterialIcons name={"favorite-outline"} size={26} color={"#E8ABC3"} />
       </TouchableOpacity>
-      <TouchableOpacity
-        onPress={() => {
-          navigation.navigate("DetailBook", { id: product._id, product });
-        }}
-      >
+      <TouchableOpacity onPress={handleClick}>
         <View style={{ flexDirection: "row", justifyContent: "center" }}>
           <Image
             style={{

@@ -5,10 +5,13 @@ import { useSelector } from "react-redux";
 import Book from "../src/components/Book";
 import DetailBook from "../src/components/BookDetail/DetailBook";
 import TabBottom from "../src/components/TabBottom";
+
+import FinalOrderScreen from "../src/screen/FinalOrderScreen";
 import LogIn from "../src/screen/LogIn";
 import OrderInforScreen from "../src/screen/OrderInforScreen";
 import OrderScreen from "../src/screen/OrderScreen";
 import SignUpScreen from "../src/screen/SignUpScreen";
+import WatchedProducts from "../src/screen/WatchedProducts";
 import WelcomeSreen from "../src/screen/WelcomeSreen";
 
 const Stack = createStackNavigator();
@@ -30,6 +33,11 @@ const Routes = () => {
               name="OrderInforScreen"
               component={OrderInforScreen}
             />
+            <Stack.Screen
+              name="finalOrderScreen"
+              component={FinalOrderScreen}
+            />
+            <Stack.Screen name="WatchedProduct" component={WatchedProducts} />
           </>
         ) : (
           <>
