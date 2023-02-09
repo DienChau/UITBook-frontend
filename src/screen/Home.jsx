@@ -29,7 +29,7 @@ import { getRatedProducts } from "../redux/slice/product/ratedProductsSlice";
 import Book from "../components/Book";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
-const baseUrl = "http://192.168.0.108:5000";
+const baseUrl = "http://192.168.0.110:5000";
 
 const Home = () => {
   const navigation = useNavigation();

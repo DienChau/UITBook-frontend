@@ -48,7 +48,7 @@ const Header = () => {
           variant="rounded"
           placeholder=""
           borderColor="rgba(255,255,255, 0.5)"
-          color="#fff"
+          color="#000"
           fontSize={14}
           bg="rgba(255,255,255, 0.7)"
           height={8}

@@ -126,8 +126,8 @@ const BookHorizontal = ({ product }) => {
           >
             Đã bán: <Text>{product.Sold}</Text>
           </Text>
-          <Text>
-            {product.ratings}
+          <Text style={{ alignItems: 'center' }}>
+            {Math.floor(product.ratings * 10) / 10}
             <Rating
               imageSize={15}
               ratingCount={5}
