@@ -1,33 +1,40 @@
 import React from "react";
-import {
-  View,
-  Text,
-  Image,
-  Dimensions,
-  TouchableOpacity,
-} from "react-native";
+import { View, Text, Image, Dimensions, TouchableOpacity } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { NumericFormat } from "react-number-format";
 import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import { Rating } from "react-native-ratings";
 
+// import { useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  clearErrorsDetails,
+  getProductDetails,
+} from '../redux/slice/product/productDetailsSlice'
+import {
+  clearErrorsReview,
+  newReview,
+  resetStateReview,
+} from '../redux/slice/product/newReviewSlice'
 const windowWidth = Dimensions.get("window").width;
 
-const Book = ({ route }) => {
-  // const navigation = useNavigation()
-  const { id, product } = route.params;
-  console.log('id:', id)
-  console.log('product:', product)
+const Book = ({ product }) => {
+  const navigation = useNavigation();
+
+  // const { id, product } = route.params;
+  // console.log('id:', id)
+  // console.log('product:', product)
   return (
     <View
       style={{
-        flex: 1,
+        // flex: 1,
         // margin: 20,
         backgroundColor: "#fff",
         borderRadius: 10,
-        marginRight: 12,
+        marginRight: 5,
         marginTop: 3,
-        marginBottom: 3,
+        marginBottom: 5,
         // width: 150,
         width: (windowWidth - 50) / 2,
         padding: 12,
@@ -49,7 +56,11 @@ const Book = ({ route }) => {
       >
         <MaterialIcons name={"favorite-outline"} size={26} color={"#E8ABC3"} />
       </TouchableOpacity>
-      <TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate("DetailBook", { id: product._id, product });
+        }}
+      >
         <View style={{ flexDirection: "row", justifyContent: "center" }}>
           <Image
             style={{
@@ -57,9 +68,9 @@ const Book = ({ route }) => {
               height: (windowWidth - 70) / 3,
               width: (windowWidth - 70) / 3,
             }}
-            alt='book'
             resizeMode="contain"
-            source={require("../../assets/book1.png")}
+            source={{ uri: product.images[0].url }}
+            alt={product.name}
           />
         </View>
         <View>
@@ -77,14 +88,14 @@ const Book = ({ route }) => {
               marginTop: 10,
             }}
           >
-            Thiên Tài Bên Trái, Kẻ Điên Bên Phải (Tái Bản)
+            {product.name}
           </Text>
         </View>
       </TouchableOpacity>
 
       <View style={{ alignItems: "center", marginTop: 6 }}>
         <NumericFormat
-          value={2456981}
+          value={product.price}
           displayType={"text"}
           // decimalSeparator={'.'}
           thousandSeparator={true}
@@ -103,12 +114,17 @@ const Book = ({ route }) => {
         }}
       >
         <Text>
-          Đã bán: <Text>100</Text>
+          Đã bán: <Text>{product.Sold}</Text>
         </Text>
-        <Text>
-          5
-          <AntDesign name="star" size={16} color="#fedc00" />
-        </Text>
+        <View style={{ alignItems: "center", flexDirection: "row" }}>
+          <Text>{Math.floor(product.ratings * 10) / 10}</Text>
+          <Rating
+            imageSize={15}
+            ratingCount={1}
+            readonly={true}
+            startingValue={product.ratings}
+          />
+        </View>
       </View>
     </View>
   );
