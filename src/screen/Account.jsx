@@ -25,7 +25,7 @@ import { useNavigation } from "@react-navigation/native";
 
 import Header from "../components/Header";
 import { Center } from "native-base";
-import { useDispatch, useSelector } from "react-redux";
+// import { useDispatch, useSelector } from "react-redux";
 import { logoutRequest } from "../redux/slice/userSlice";
 // import { Button } from "native-base";
 import { clearWatchedProduct } from "../redux/slice/product/watchedProduct";
