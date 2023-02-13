@@ -6,6 +6,7 @@ import {
   StyleSheet,
   SafeAreaView,
   ToastAndroid,
+  Image
 } from "react-native";
 import BookHorizontal from "../components/BookHorizontal";
 import Header from "../components/Header";
@@ -91,7 +92,11 @@ const Home = () => {
     >
       <SafeAreaView>
         <Header />
-        {/* <Listbook onPress={addFavoriteHandler} /> */}
+        <Image
+          source={require('../../assets/home-banner-2.png')}
+          style={{ height: 100, width: '100%', marginTop: 10 }}
+        />
+
         <View style={{ marginTop: 10 }}>
           <Text style={{ fontSize: 16 }}>Bán chạy nhất</Text>
           <View
@@ -100,6 +105,20 @@ const Home = () => {
               borderBottomColor: "#ccc",
               borderBottomWidth: 1,
             }}
+          />
+        </View>
+        <View style={{ flexDirection: 'row' }}>
+          <Image
+            source={require('../../assets/voucher-1.png')}
+            style={{ height: 60, width: '33%' }}
+          />
+          <Image
+            source={require('../../assets/voucher-2.png')}
+            style={{ height: 60, width: '33%' }}
+          />
+          <Image
+            source={require('../../assets/voucher-3.png')}
+            style={{ height: 60, width: '33%' }}
           />
         </View>
         <ScrollView
@@ -117,6 +136,11 @@ const Home = () => {
             // </>
           ))}
         </ScrollView>
+
+        <Image
+          source={require('../../assets/home-banner-1.png')}
+          style={{ height: 100, width: '100%', marginTop: 10 }}
+        />
 
         <View style={{ marginTop: 10 }}>
           <Text style={{ fontSize: 16 }}>Phổ biến</Text>
