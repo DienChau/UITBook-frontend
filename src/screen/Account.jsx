@@ -25,7 +25,7 @@ import { useNavigation } from "@react-navigation/native";
 
 import Header from "../components/Header";
 import { Center } from "native-base";
-// import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logoutRequest } from "../redux/slice/userSlice";
 // import { Button } from "native-base";
 import { clearWatchedProduct } from "../redux/slice/product/watchedProduct";
@@ -34,9 +34,14 @@ import { useDispatch, useSelector } from "react-redux";
 
 const Account = () => {
   const navigation = useNavigation();
+  const { user } = useSelector((state) => state.user);
+  const { cartItems } = useSelector((state) => state.cart);
+  console.log("user ", user);
   const [hasGalleryPermission, setHasGalleryPermission] = useState(null);
   const [imageAvatar, setImageAvatar] = useState(
-    "https://www.invert.vn/media/uploads/uploads/2022/9/17165757-39.jpeg"
+    user
+      ? user.avatar.url
+      : "https://th.bing.com/th/id/R.b7509f3e22d364dc80a46c3d9da35bff?rik=D%2f44COiUm0HkRg&pid=ImgRaw&r=0"
   );
   const dispatch = useDispatch();
 
@@ -114,20 +119,24 @@ const Account = () => {
           }}
         >
           <FontAwesome name="shopping-basket" size={24} color="#888" />
-          <Box
-            px={1}
-            rounded="full"
-            position="absolute"
-            top={-8}
-            left={4}
-            bg={"#E72A2A"}
-            _text={{
-              color: "#fff",
-              fontSize: "11px",
-            }}
-          >
-            5
-          </Box>
+          {cartItems.length !== 0 ? (
+            <>
+              <Box
+                px={1}
+                rounded="full"
+                position="absolute"
+                top={-8}
+                left={4}
+                bg={"#E72A2A"}
+                _text={{
+                  color: "#fff",
+                  fontSize: "11px",
+                }}
+              >
+                {cartItems.length}
+              </Box>
+            </>
+          ) : null}
         </Pressable>
       </View>
       <ScrollView>
@@ -184,7 +193,12 @@ const Account = () => {
               </TouchableOpacity>
             </View>
             <View style={{ alignItems: "center" }}>
-              <Text style={{}}>nguoihamdocsach21</Text>
+              {user && (
+                <Text style={{ fontWeight: "700", fontSize: 18 }}>
+                  {user.name}
+                </Text>
+              )}
+
               <View
                 style={{
                   marginTop: 10,
@@ -238,11 +252,20 @@ const Account = () => {
                     padding: 10,
                   }}
                 >
-                  <FontAwesome
-                    name="calendar-check-o"
-                    size={24}
-                    color="#E8ABC3"
-                  />
+                  <Pressable
+                    onPress={() =>
+                      navigation.navigate("ProcessingOrder", {
+                        type: "Processing",
+                      })
+                    }
+                  >
+                    <FontAwesome
+                      name="calendar-check-o"
+                      size={24}
+                      color="#E8ABC3"
+                    />
+                  </Pressable>
+
                   {/* <Feather name="check-square" size={24} color="#E8ABC3" /> */}
                 </View>
                 <Text style={{ marginTop: 8 }}>Đang xử lý</Text>
@@ -262,11 +285,20 @@ const Account = () => {
                     padding: 10,
                   }}
                 >
-                  <FontAwesome5
-                    name="shipping-fast"
-                    size={24}
-                    color="#E8ABC3"
-                  />
+                  <Pressable
+                    onPress={() =>
+                      navigation.navigate("ProcessingOrder", {
+                        type: "Shipping",
+                      })
+                    }
+                  >
+                    <FontAwesome5
+                      name="shipping-fast"
+                      size={24}
+                      color="#E8ABC3"
+                    />
+                  </Pressable>
+
                   {/* <Feather name="check-square" size={24} color="#E8ABC3" /> */}
                 </View>
                 <Text style={{ marginTop: 8 }}>Đang vận chuyển</Text>
@@ -286,7 +318,15 @@ const Account = () => {
                     padding: 10,
                   }}
                 >
-                  <Feather name="check-square" size={24} color="#E8ABC3" />
+                  <Pressable
+                    onPress={() =>
+                      navigation.navigate("ProcessingOrder", {
+                        type: "Shipped",
+                      })
+                    }
+                  >
+                    <Feather name="check-square" size={24} color="#E8ABC3" />
+                  </Pressable>
                 </View>
                 <Text style={{ marginTop: 8 }}>Đã giao</Text>
               </View>

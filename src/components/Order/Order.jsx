@@ -86,186 +86,235 @@ const Order = () => {
           {/* <FontAwesome name="shopping-basket" size={24} color="#40494b" /> */}
         </View>
       </View>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <Box paddingBottom={5}>
-          <SwipeListView
-            data={product}
-            renderItem={(item, rowMap) => {
-              return (
-                <View paddingLeft={3} paddingRight={3}>
-                  <OrderItem bookItem={item.item} />
-                </View>
-              );
-            }}
-            renderHiddenItem={(item, rowMap) => {
-              return (
-                <View
-                  paddingLeft={5}
-                  paddingRight={3}
-                  paddingTop={2}
-                  paddingBottom={2}
-                  marginTop={5}
-                  bg={"red.100"}
-                  height={122}
-                  maxHeight={150}
-                  marginLeft={3}
-                  marginRight={3}
-                  marginBottom={5}
-                  rounded={20}
-                  alignItems={"flex-end"}
-                  justifyContent={"center"}
-                >
-                  <Pressable onPress={() => handledelete(item.item)}>
-                    <MaterialCommunityIcons
-                      name="delete"
-                      size={30}
-                      color="red"
-                    />
-                  </Pressable>
-                </View>
-              );
-            }}
-            rightOpenValue={-50}
-            previewOpenDelay={3000}
-            previewOpenValue={-40}
-          />
-          <View marginTop={5} justifyContent={"center"} alignItems={"center"}>
-            <Button
-              onPress={handleDeleteAll}
-              _text={{ fontWeight: "900" }}
-              width={"50%"}
-            >
-              Xóa tất cả
-            </Button>
-          </View>
-        </Box>
-      </ScrollView>
-
-      <View rounded={20} bg={"#fff"} padding={3}>
-        <Text color={"#4d4c4c"} fontSize={18} fontWeight="600">
-          Đơn hàng của bạn
-        </Text>
-        <Divider thickness="2"></Divider>
-        <View
-          marginTop={5}
-          marginBottom={2}
-          flexDirection={"row"}
-          justifyContent={"space-between"}
-        >
-          <Text fontSize={16}>Tổng tiền hàng</Text>
-
-          <NumericFormat
-            value={price}
-            displayType={"text"}
-            // decimalSeparator={'.'}
-            thousandSeparator={true}
-            // thousandSeparator={"."}
-            suffix={" đ"}
-            renderText={(value) => (
-              <Text style={{ color: "#DA2424", fontSize: 16 }}>{value}</Text>
-            )}
-          />
-        </View>
-        <View
-          marginBottom={5}
-          flexDirection={"row"}
-          justifyContent={"space-between"}
-        >
-          <Text fontSize={16}>Phí vận chuyển</Text>
-          <NumericFormat
-            value={shippingCharges}
-            displayType={"text"}
-            // decimalSeparator={'.'}
-            thousandSeparator={true}
-            // thousandSeparator={"."}
-            suffix={" đ"}
-            renderText={(value) => (
-              <Text style={{ color: "#DA2424", fontSize: 16 }}>{value}</Text>
-            )}
-          />
-        </View>
-        <Divider thickness="2"></Divider>
-        <View
-          marginTop={5}
-          marginBottom={5}
-          flexDirection={"row"}
-          justifyContent={"space-between"}
-        >
-          <Text fontWeight={"700"} fontSize={18} color={"#EE3E3E"}>
-            Tổng thanh toán
-          </Text>
-          <NumericFormat
-            value={totalPrice}
-            displayType={"text"}
-            // decimalSeparator={'.'}
-            thousandSeparator={true}
-            // thousandSeparator={"."}
-            suffix={" đ"}
-            renderText={(value) => (
-              <Text
-                style={{ color: "#EE3E3E", fontSize: 18, fontWeight: "700" }}
+      {product?.length === 0 ? (
+        <>
+          <View alignItems={"center"}>
+            <Image
+              style={{ width: 300, height: 300 }}
+              source={require("../../../assets/empty.gif")}
+            />
+            <Text textAlign={"center"} padding={5}>
+              Giỏ hàng hiện không có sản phẩm khách hàng vui lòng quay lại trang
+              chủ để tiếp tục mua sấm
+            </Text>
+            <Pressable onPress={() => navigation.navigate("Home")}>
+              <View
+                rounded={5}
+                padding={2}
+                width={"50%"}
+                bg={"#55b3d9"}
+                alignItems={"center"}
+                flexDirection={"row"}
               >
-                {value}
-              </Text>
-            )}
-          />
-        </View>
-        <Button
-          p={2}
-          bg={"#e8abc3"}
-          _text={{ fontWeight: "900", fontSize: 20 }}
-          color={"#fff"}
-          onPress={handleButtonOrder}
-        >
-          Đặt Hàng
-        </Button>
-      </View>
-      <AlertDialog
-        leastDestructiveRef={cancelRef}
-        isOpen={isOpen}
-        onClose={onClose}
-      >
-        <AlertDialog.Content>
-          <AlertDialog.Body>
-            <View alignItems={"center"}>
-              <Text fontSize={20}>
-                Bạn có chắc muốn xóa tất cả sản phẩm này khỏi giỏ hàng??
-              </Text>
-              <Image
-                source={{
-                  uri: "https://thuthuatnhanh.com/wp-content/uploads/2020/02/icon-ong-bee-phan-van.png",
+                <Ionicons name="home" size={24} color="#fff" />
+                <Text
+                  marginLeft={3}
+                  fontWeight={"600"}
+                  fontSize={18}
+                  color={"#fff"}
+                >
+                  Trang chủ
+                </Text>
+              </View>
+            </Pressable>
+          </View>
+        </>
+      ) : (
+        <>
+          <ScrollView showsVerticalScrollIndicator={false}>
+            <Box paddingBottom={5}>
+              <SwipeListView
+                data={product}
+                renderItem={(item, rowMap) => {
+                  return (
+                    <View paddingLeft={3} paddingRight={3}>
+                      <OrderItem bookItem={item.item} />
+                    </View>
+                  );
                 }}
-                alt="hinh"
-                style={{
-                  width: 100,
-                  height: 100,
-                  resizeMode: "stretch",
+                renderHiddenItem={(item, rowMap) => {
+                  return (
+                    <View
+                      paddingLeft={5}
+                      paddingRight={3}
+                      paddingTop={2}
+                      paddingBottom={2}
+                      marginTop={5}
+                      bg={"red.100"}
+                      height={122}
+                      maxHeight={150}
+                      marginLeft={3}
+                      marginRight={3}
+                      marginBottom={5}
+                      rounded={20}
+                      alignItems={"flex-end"}
+                      justifyContent={"center"}
+                    >
+                      <Pressable onPress={() => handledelete(item.item)}>
+                        <MaterialCommunityIcons
+                          name="delete"
+                          size={30}
+                          color="red"
+                        />
+                      </Pressable>
+                    </View>
+                  );
                 }}
+                rightOpenValue={-50}
+                previewOpenDelay={3000}
+                previewOpenValue={-40}
+              />
+              <View
+                marginTop={5}
+                justifyContent={"center"}
+                alignItems={"center"}
+              >
+                <Button
+                  onPress={handleDeleteAll}
+                  _text={{ fontWeight: "900" }}
+                  width={"50%"}
+                >
+                  Xóa tất cả
+                </Button>
+              </View>
+            </Box>
+          </ScrollView>
+
+          <View rounded={20} bg={"#fff"} padding={3}>
+            <Text color={"#4d4c4c"} fontSize={18} fontWeight="600">
+              Đơn hàng của bạn
+            </Text>
+            <Divider thickness="2"></Divider>
+            <View
+              marginTop={5}
+              marginBottom={2}
+              flexDirection={"row"}
+              justifyContent={"space-between"}
+            >
+              <Text fontSize={16}>Tổng tiền hàng</Text>
+
+              <NumericFormat
+                value={price}
+                displayType={"text"}
+                // decimalSeparator={'.'}
+                thousandSeparator={true}
+                // thousandSeparator={"."}
+                suffix={" đ"}
+                renderText={(value) => (
+                  <Text style={{ color: "#DA2424", fontSize: 16 }}>
+                    {value}
+                  </Text>
+                )}
               />
             </View>
-          </AlertDialog.Body>
-          <AlertDialog.Footer>
-            <Button.Group space={2}>
-              <Button
-                variant="unstyled"
-                bg={"#dddddd"}
-                onPress={onClose}
-                ref={cancelRef}
-                _text={{ fontWeight: "700", fontSize: 16 }}
-              >
-                Cancel
-              </Button>
-              <Button
-                _text={{ fontWeight: "700", fontSize: 16 }}
-                bg={"#f29dc4"}
-                onPress={deleteProductAll}
-              >
-                Delete
-              </Button>
-            </Button.Group>
-          </AlertDialog.Footer>
-        </AlertDialog.Content>
-      </AlertDialog>
+            <View
+              marginBottom={5}
+              flexDirection={"row"}
+              justifyContent={"space-between"}
+            >
+              <Text fontSize={16}>Phí vận chuyển</Text>
+              <NumericFormat
+                value={shippingCharges}
+                displayType={"text"}
+                // decimalSeparator={'.'}
+                thousandSeparator={true}
+                // thousandSeparator={"."}
+                suffix={" đ"}
+                renderText={(value) => (
+                  <Text style={{ color: "#DA2424", fontSize: 16 }}>
+                    {value}
+                  </Text>
+                )}
+              />
+            </View>
+            <Divider thickness="2"></Divider>
+            <View
+              marginTop={5}
+              marginBottom={5}
+              flexDirection={"row"}
+              justifyContent={"space-between"}
+            >
+              <Text fontWeight={"700"} fontSize={18} color={"#EE3E3E"}>
+                Tổng thanh toán
+              </Text>
+              <NumericFormat
+                value={totalPrice}
+                displayType={"text"}
+                // decimalSeparator={'.'}
+                thousandSeparator={true}
+                // thousandSeparator={"."}
+                suffix={" đ"}
+                renderText={(value) => (
+                  <Text
+                    style={{
+                      color: "#EE3E3E",
+                      fontSize: 18,
+                      fontWeight: "700",
+                    }}
+                  >
+                    {value}
+                  </Text>
+                )}
+              />
+            </View>
+            <Button
+              p={2}
+              bg={"#e8abc3"}
+              _text={{ fontWeight: "900", fontSize: 20 }}
+              color={"#fff"}
+              onPress={handleButtonOrder}
+            >
+              Đặt Hàng
+            </Button>
+          </View>
+          <AlertDialog
+            leastDestructiveRef={cancelRef}
+            isOpen={isOpen}
+            onClose={onClose}
+          >
+            <AlertDialog.Content>
+              <AlertDialog.Body>
+                <View alignItems={"center"}>
+                  <Text fontSize={20}>
+                    Bạn có chắc muốn xóa tất cả sản phẩm này khỏi giỏ hàng??
+                  </Text>
+                  <Image
+                    source={{
+                      uri: "https://thuthuatnhanh.com/wp-content/uploads/2020/02/icon-ong-bee-phan-van.png",
+                    }}
+                    alt="hinh"
+                    style={{
+                      width: 100,
+                      height: 100,
+                      resizeMode: "stretch",
+                    }}
+                  />
+                </View>
+              </AlertDialog.Body>
+              <AlertDialog.Footer>
+                <Button.Group space={2}>
+                  <Button
+                    variant="unstyled"
+                    bg={"#dddddd"}
+                    onPress={onClose}
+                    ref={cancelRef}
+                    _text={{ fontWeight: "700", fontSize: 16 }}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    _text={{ fontWeight: "700", fontSize: 16 }}
+                    bg={"#f29dc4"}
+                    onPress={deleteProductAll}
+                  >
+                    Delete
+                  </Button>
+                </Button.Group>
+              </AlertDialog.Footer>
+            </AlertDialog.Content>
+          </AlertDialog>
+        </>
+      )}
     </View>
   );
 };

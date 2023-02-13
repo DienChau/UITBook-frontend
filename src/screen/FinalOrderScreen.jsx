@@ -9,8 +9,9 @@ import { Fontisto } from "@expo/vector-icons";
 import { Foundation } from "@expo/vector-icons";
 import { NumericFormat } from "react-number-format";
 import imageSeccuss from "../../assets/success.gif";
-import { creatOrder } from "../redux/slice/newOrderSlice";
+import { clearOrder, creatOrder } from "../redux/slice/newOrderSlice";
 import Loading from "../components/Loading";
+import { clearCartItem } from "../redux/slice/cartSlice";
 
 const FinalOrderScreen = () => {
   const dispatch = useDispatch();
@@ -19,11 +20,20 @@ const FinalOrderScreen = () => {
   const [order, setOrder] = useState({});
 
   const navigation = useNavigation();
-  const { loading } = useSelector((state) => state.order);
+  const { loading, success } = useSelector((state) => state.order);
+
   const { cartItems, shippingInfo } = useSelector((state) => state.cart);
   // const orderItem = useSelector((state) => state.cart.cartItems);
   const user = useSelector((state) => state.user.user);
-
+  // useEffect(() => {
+  //   dispatch(clearOrder());
+  // }, []);
+  useEffect(() => {
+    console.log("success", success);
+    if (success) {
+      dispatch(clearCartItem());
+    }
+  }, [success]);
   useEffect(() => {
     const paymentInfo = {
       method: "COD",
@@ -38,9 +48,10 @@ const FinalOrderScreen = () => {
     });
   }, [cartItems, shippingInfo, user]);
   const orderHandler = () => {
-    console.log(order);
+    // console.log(order);
     setShowModal(true);
     dispatch(creatOrder(order));
+    dispatch(clearOrder());
     setTimeout(() => {
       navigation.navigate("Home");
     }, 3000);

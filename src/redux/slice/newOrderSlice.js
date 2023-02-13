@@ -26,7 +26,7 @@ const newOrderSlice = createSlice({
   name: "createOrder",
   initialState,
   reducers: {
-    clear: () => {
+    clearOrder: (state, action) => {
       state.error = null;
       state.message = null;
       state.success = null;
@@ -42,7 +42,7 @@ const newOrderSlice = createSlice({
         console.log("fulfilled");
         state.loading = false;
         state.order = action.payload.order;
-        state.success = action.payload.success;
+        state.success = true;
       })
       .addCase(creatOrder.rejected, (state, action) => {
         console.log("reject");
@@ -52,5 +52,5 @@ const newOrderSlice = createSlice({
       });
   },
 });
-
+export const { clearOrder } = newOrderSlice.actions;
 export default newOrderSlice.reducer;
