@@ -12,7 +12,7 @@ import {
   newReview,
   resetStateReview,
 } from "../../redux/slice/product/newReviewSlice";
-
+// import { FontAwesome } from '@expo/vector-icons';
 import {
   Avatar,
   Box,
@@ -36,6 +36,7 @@ import {
   Pressable,
   ToastAndroid,
   TouchableOpacity,
+
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
@@ -50,6 +51,8 @@ import moment from "moment";
 import { useNavigation } from "@react-navigation/native";
 import Book from "../Book";
 import { addToCart } from "../../redux/slice/cartSlice";
+// import { addItemsToFavourite } from "../../redux/features/favourite/favouriteSlice";
+import { addItemsToFavourite } from "../../redux/slice/favorites/favouriteSlice";
 const windowWidth = Dimensions.get("window").width;
 
 const DetailBook = ({ route }) => {
@@ -70,9 +73,6 @@ const DetailBook = ({ route }) => {
   const [showModal, setShowModal] = useState(false);
   const height1 = Dimensions.get("screen").height - 120;
   const button = useRef();
-  // useEffect(() => {
-  //   console.log(button.current.height);
-  // }, []);
 
   //Call API
   const [newBooks, setNewBooks] = React.useState([]);
@@ -106,8 +106,8 @@ const DetailBook = ({ route }) => {
     fetchDataNewBooks();
   }, []);
 
-  //Handle review
-  // const { id } = useParams();
+  //Handle scrollView
+  // const scrollRef = useRef()
 
   const {
     loading,
@@ -173,6 +173,7 @@ const DetailBook = ({ route }) => {
     }
   }, [dispatch, error, alert, reviewError, success]);
 
+  //Handle add to cart
   const handleAddToCart = (product) => {
     if (product.Stock < 1) {
       ToastAndroid.show(
@@ -202,12 +203,48 @@ const DetailBook = ({ route }) => {
     "https://jooinn.com/images/sunset-532.png",
     "https://cdn.audleytravel.com/-/-/80/023049146222199135243151240186242239250085111149.jpg",
   ];
+
+  //Handle add to favorites
+  function handleAddFavorite(product) {
+    dispatch(addItemsToFavourite(product._id));
+    ToastAndroid.show(
+      "Thêm vào yêu thích thành công",
+      ToastAndroid.SHORT
+    );
+    setHeart(true)
+  }
+
+  function handleAddFavoriteRelated(product) {
+    dispatch(addItemsToFavourite(product));
+    ToastAndroid.show(
+      "Thêm vào yêu thích thành công",
+      ToastAndroid.SHORT
+    );
+    // setHeart(true)
+  }
+
+  const onPressTouch = () => {
+    button.current?.scrollTo({
+      y: 0,
+      animated: true,
+    });
+  }
+
   return (
     <>
       {productBook ? (
         <View flex={1}>
           <SafeAreaView>
-            <ScrollView ref={scrollRef} height={height1}>
+            <ScrollView height={height1}
+              ref={button}
+            // onContentSizeChange={() => {
+            //   button.current.scrollTo({
+            //     x: 0,
+            //     y: 0,
+            //     animated: true
+            //   })
+            // }}
+            >
               <View bg={"#CBF0F8"}>
                 <View bg={"#fff"}>
                   <View
@@ -326,7 +363,10 @@ const DetailBook = ({ route }) => {
               })}
             </View> */}
                       <View position="absolute" bottom={5} right={5}>
-                        <Pressable onPress={() => setHeart(!heart)}>
+                        <Pressable
+                          // onPress={() => setHeart(!heart)}
+                          onPress={() => handleAddFavorite(productBook)}
+                        >
                           {heart ? (
                             <AntDesign name="heart" size={24} color="#E8ABC3" />
                           ) : (
@@ -416,10 +456,10 @@ const DetailBook = ({ route }) => {
                     paddingTop={3}
                     horizontal={true}
                   >
-                    {popularBooks.map((item) => (
-                      <>
-                        <Book product={item} />
-                      </>
+                    {popularBooks && popularBooks.map((item, index) => (
+                      // <>
+                      <Book handleAddFavorite={handleAddFavoriteRelated} key={index} product={item} />
+                      // </>
                     ))}
                   </ScrollView>
                 </View>
@@ -635,9 +675,9 @@ const DetailBook = ({ route }) => {
                           </Button>
                           <Button
                             onPress={reviewSubmitHandler}
-                            // onPress={() => {
-                            //   setShowModal(false);
-                            // }}
+                          // onPress={() => {
+                          //   setShowModal(false);
+                          // }}
                           >
                             Thêm
                           </Button>
@@ -648,8 +688,8 @@ const DetailBook = ({ route }) => {
                   <Divider my="2" bg={"gray.500"} />
 
                   {productBook.reviews &&
-                    productBook.reviews.map((review) => (
-                      <>
+                    productBook.reviews.map((review, index) => (
+                      <View key={index}>
                         <View
                           key={review._id}
                           paddingLeft={5}
@@ -714,7 +754,7 @@ const DetailBook = ({ route }) => {
                           </View>
                         </View>
                         <Divider my="1" style={{ backgroundColor: "#eee" }} />
-                      </>
+                      </View>
                     ))}
                 </View>
               </View>
@@ -734,13 +774,28 @@ const DetailBook = ({ route }) => {
                   paddingBottom={3}
                   paddingTop={3}
                   horizontal={true}
+                  ref={button}
+                // onContentSizeChange={() => {
+                //   button.current.scrollTo({
+                //     x: 0, 
+                //     y: 0, 
+                //     animated: true
+                //   })
+                // }}
                 >
-                  {newBooks.map((item) => (
-                    <>
-                      <Book product={item} />
-                    </>
+                  {newBooks && newBooks.map((item, index) => (
+                    // <>
+                    <Book key={index} handleAddFavorite={handleAddFavoriteRelated} product={item} />
+                    // </>
                   ))}
                 </ScrollView>
+                <TouchableOpacity
+                  style={{ flex: 1, alignItems: 'flex-end' }}
+                  ref={button}
+                // onPress={onPressTouch}
+                >
+                  <FontAwesome name="arrow-circle-up" size={30} color="#10d187" />
+                </TouchableOpacity>
               </View>
             </ScrollView>
           </SafeAreaView>

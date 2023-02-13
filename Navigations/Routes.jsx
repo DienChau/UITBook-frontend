@@ -13,6 +13,7 @@ import OrderScreen from "../src/screen/OrderScreen";
 import SignUpScreen from "../src/screen/SignUpScreen";
 import WatchedProducts from "../src/screen/WatchedProducts";
 import WelcomeSreen from "../src/screen/WelcomeSreen";
+import AccountInfor from '../src/screen/AccountInfor'
 
 const Stack = createStackNavigator();
 const Routes = () => {
@@ -38,6 +39,7 @@ const Routes = () => {
               component={FinalOrderScreen}
             />
             <Stack.Screen name="WatchedProduct" component={WatchedProducts} />
+            <Stack.Screen name="AccountInfor" component={AccountInfor} />
           </>
         ) : (
           <>

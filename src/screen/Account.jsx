@@ -25,9 +25,12 @@ import { useNavigation } from "@react-navigation/native";
 
 import Header from "../components/Header";
 import { Center } from "native-base";
-import { useDispatch } from "react-redux";
+// import { useDispatch } from "react-redux";
 import { logoutRequest } from "../redux/slice/userSlice";
 // import { Button } from "native-base";
+import { clearWatchedProduct } from "../redux/slice/product/watchedProduct";
+import { useDispatch, useSelector } from "react-redux";
+
 
 const Account = () => {
   const navigation = useNavigation();
@@ -35,6 +38,11 @@ const Account = () => {
   const [imageAvatar, setImageAvatar] = useState(
     "https://www.invert.vn/media/uploads/uploads/2022/9/17165757-39.jpeg"
   );
+  const dispatch = useDispatch();
+
+  // useEffect(() => {
+  //   dispatch(clearWatchedProduct());
+  // }, [])
 
   useEffect(() => {
     (async () => {
@@ -61,12 +69,15 @@ const Account = () => {
       return <Text>No access to Internal Storage</Text>;
     }
   };
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const handleLogOut = () => {
     dispatch(logoutRequest());
   };
   const handleWatchedProduct = () => {
     navigation.navigate("WatchedProduct");
+  };
+  const handleAccountInfor = () => {
+    navigation.navigate("AccountInfor");
   };
 
   return (
@@ -282,33 +293,37 @@ const Account = () => {
             </View>
           </View>
           <View style={{ marginTop: 10 }}>
-            <View
-              style={{
-                flexDirection: "row",
-                backgroundColor: "#fff",
-                alignItems: "center",
-                paddingLeft: 20,
-                marginBottom: 10,
-                paddingVertical: 6,
-              }}
-            >
+            <TouchableOpacity onPress={handleAccountInfor}>
               <View
                 style={{
-                  backgroundColor: "#E8ABC3",
-                  borderRadius: 50,
-                  padding: 8,
+                  flexDirection: "row",
+                  backgroundColor: "#fff",
+                  alignItems: "center",
+                  paddingLeft: 20,
+                  marginBottom: 10,
+                  paddingVertical: 6,
                 }}
+
               >
-                <MaterialCommunityIcons
-                  name="account-outline"
-                  size={24}
-                  color="#fff"
-                />
+                <View
+                  style={{
+                    backgroundColor: "#E8ABC3",
+                    borderRadius: 50,
+                    padding: 8,
+                  }}
+                >
+                  <MaterialCommunityIcons
+                    name="account-outline"
+                    size={24}
+                    color="#fff"
+                  />
+                </View>
+                <Text style={{ marginLeft: 10, fontSize: 16 }}>
+                  Thông tin tài khoản
+                </Text>
               </View>
-              <Text style={{ marginLeft: 10, fontSize: 16 }}>
-                Thông tin tài khoản
-              </Text>
-            </View>
+            </TouchableOpacity>
+
             <View
               style={{
                 flexDirection: "row",

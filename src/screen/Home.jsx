@@ -1,41 +1,26 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import {
   ScrollView,
   Text,
   View,
-  Dimensions,
   StyleSheet,
   SafeAreaView,
-  Image,
-  TouchableOpacity,
+  ToastAndroid,
 } from "react-native";
-import Listbook from "../components/ListBook";
 import BookHorizontal from "../components/BookHorizontal";
 import Header from "../components/Header";
-import axios from "axios";
-import { Rating } from "react-native-ratings";
-
-import { MaterialIcons, AntDesign } from "@expo/vector-icons";
-import { NumericFormat } from "react-number-format";
-
 import { useNavigation } from "@react-navigation/native";
-
 import { useDispatch, useSelector } from "react-redux";
-// import { getNewsProducts } from "../../../redux/features/product/newsProductsSlice";
-import { getNewsProducts } from "../redux/slice/product/newsProductsSlice";
-// import { getPopularProducts } from "../../../redux/features/product/popularProductsSlice";
 import { getPopularProducts } from "../redux/slice/product/popularProductsSlice";
 import { getRatedProducts } from "../redux/slice/product/ratedProductsSlice";
+import { addItemsToFavourite } from '../redux/slice/favorites/favouriteSlice'
 import Book from "../components/Book";
-const windowWidth = Dimensions.get("window").width;
-const windowHeight = Dimensions.get("window").height;
-const baseUrl = "http://192.168.0.110:5000";
 
 const Home = () => {
   const navigation = useNavigation();
   const [allProducts, setProducts] = React.useState([]);
   const [popularBooks, setPopularBooks] = React.useState([]);
-
+  const scrollViewRef = useRef();
   //Call API from redux
   //get allBook
   const { error, products } = useSelector((state) => state.ratedProducts);
@@ -78,6 +63,21 @@ const Home = () => {
   //   }
   //   fetchDataPopularBooks();
   // }, []);
+
+  //Handle add to favorites
+  // const [favorite, setFavorite] = useState(false)
+  function handleAddFavorite(productItem) {
+    dispatch(addItemsToFavourite(productItem));
+    ToastAndroid.show(
+      "Thêm vào yêu thích thành công",
+      ToastAndroid.SHORT
+    );
+    // favorite = true
+    // console.log('Thêm vào yêu thích thành công')
+    // setFavorite(true)
+    // console.log('heart: ', heart)
+    console.log('productItem: ', productItem)
+  }
   return (
     <ScrollView
       style={{
@@ -86,6 +86,8 @@ const Home = () => {
         padding: 10,
         paddingTop: 0,
       }}
+      ref={scrollViewRef}
+    // onContentSizeChange={() => scrollViewRef.current.scrollTo({ x: 0, y: 400, animated: true })}
     >
       <SafeAreaView>
         <Header />
@@ -109,10 +111,10 @@ const Home = () => {
             marginVertical: 10,
           }}
         >
-          {products.map((product) => (
-            <>
-              <Book product={product} />
-            </>
+          {products && products.map((product, index) => (
+            // <>
+            <Book key={index} handleAddFavorite={handleAddFavorite} product={product} />
+            // </>
           ))}
         </ScrollView>
 
@@ -127,10 +129,10 @@ const Home = () => {
           />
         </View>
         <View style={{ marginBottom: 24 }}>
-          {popularProducts.map((product) => (
-            <>
-              <BookHorizontal product={product} />
-            </>
+          {popularProducts && popularProducts.map((product, index) => (
+            // <>
+            <BookHorizontal key={index} handleAddFavorite={handleAddFavorite} product={product} />
+            // </>
           ))}
         </View>
       </SafeAreaView>

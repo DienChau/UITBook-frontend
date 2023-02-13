@@ -15,6 +15,7 @@ const WatchedProducts = () => {
   const handleClear = () => {
     dispatch(clearWatchedProduct());
   };
+
   return (
     <>
       <View bg={"#d5f3f9"} flex={1}>
@@ -65,11 +66,11 @@ const WatchedProducts = () => {
               <ScrollView>
                 <View paddingLeft={5} paddingRight={5}>
                   {listProduct &&
-                    listProduct?.map((item) => {
+                    listProduct?.map((item, index) => {
                       return (
-                        <>
-                          <BookHorizontal product={item} />
-                        </>
+                        // <>
+                        <BookHorizontal key={index} product={item} />
+                        // </>
                       );
                     })}
                 </View>

@@ -2,29 +2,36 @@ import React from "react";
 import {
   SafeAreaView,
   View,
-  FlatList,
   StyleSheet,
   Text,
-  StatusBar,
   Image,
-  Dimensions,
   ScrollView,
-  LogBox,
-  TouchableOpacity,
+  Pressable,
 } from "react-native";
 import Header from "../components/Header";
-import { MaterialIcons } from "@expo/vector-icons";
-import { NumericFormat } from "react-number-format";
-import { AntDesign } from "@expo/vector-icons";
-import products from "../data/Product";
-const windowWidth = Dimensions.get("window").width;
-import { useNavigation } from "@react-navigation/native";
+import BookFavorite from "../components/BookFavorite";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  clearFavorite,
+  removeItemsFromFavorite,
+} from "../redux/slice/favorites/favouriteSlice";
 
 const Favorites = () => {
-  const navigation = useNavigation()
+  let { favouriteItems } = useSelector((state) => state.favourite);
+  // console.log("favouriteItems:", favouriteItems);
+
+  const dispatch = useDispatch();
+
+  const handleClearFavorite = () => {
+    dispatch(clearFavorite());
+  };
+
+  const handleClearItemsFromFavorite = (item) => {
+    console.log("item clear: ", item);
+    dispatch(removeItemsFromFavorite(item.book));
+  };
 
   return (
-    // <SafeAreaView>
     <ScrollView
       style={{
         backgroundColor: "#CBF0F8",
@@ -36,120 +43,64 @@ const Favorites = () => {
         <Image
           style={{
             width: "100%",
-            marginTop: 10
+            marginTop: 10,
           }}
-          alt='banner'
+          alt="banner"
           resizeMode="cover"
           source={require("../../assets/like-banner1.png")}
         />
-        <View style={{
-          marginBottom: 10
-        }}>
-          {
-            products.map((product) => (
-              <View
-                key={product._id}
-                style={[
-                  {
-                    marginTop: 16,
-                    marginHorizontal: 10,
-                    backgroundColor: "#fff",
-                    borderRadius: 10,
-                    marginRight: 12,
-                    // width: "100%",
-                    padding: 18,
-                    position: "relative",
-                    flexDirection: "row",
-                  },
-                  styles.shadowBorder,
-                ]}
+        {favouriteItems.length === 0 ? (
+          <View
+            style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+          >
+            <Image
+              source={{
+                uri: "https://drive.google.com/uc?id=1k2nXiRoCsJ2gKuRmL9FoFwkTgSpW_4n_",
+              }}
+              style={{ marginTop: 10, width: 400, height: 400 }}
+            />
+            <Text style={{ marginTop: 10 }}>
+              Không có cuốn sách nào trong mục này
+            </Text>
+          </View>
+        ) : (
+          <View>
+            {favouriteItems.map((product, index) => {
+              return (
+                <BookFavorite
+                  handleClearItemsFromFavorite={handleClearItemsFromFavorite}
+                  product={product}
+                  key={index}
+                />
+              );
+            })}
+            <View
+              style={{
+                flex: 1,
+                alignItems: "center",
+              }}
+            >
+              <Pressable
+                style={{
+                  marginTop: 10,
+                  backgroundColor: "#fecbde",
+                  flex: 1,
+                  alignItems: "center",
+                  justifyContent: "center",
+                  paddingHorizontal: 20,
+                  paddingVertical: 15,
+
+                  borderRadius: 10,
+                }}
+                onPress={() => handleClearFavorite()}
               >
-                <TouchableOpacity
-                  // onPress={addFavoriteHandler}
-                  style={{ position: "absolute", right: 20, top: 20, zIndex: 2 }}
-                >
-                  <MaterialIcons name={"favorite"} size={26} color={"#E8ABC3"} />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => navigation.navigate("DetailBook", product)}
-                  style={{ flexDirection: "row", justifyContent: "center", flex: 2 }}
-                >
-                  <Image
-                    style={{
-                      height: 100,
-                      height: (windowWidth - 70) / 3,
-                      width: (windowWidth - 70) / 3,
-                    }}
-                    resizeMode="contain"
-                    source={{ uri: product.images[0].url }}
-                    alt={product.name}
-                  />
-                </TouchableOpacity>
-                <View
-                  style={{
-                    flex: 5,
-                    justifyContent: "center",
-                    alignItems: "stretch",
-                    marginLeft: 10,
-                  }}
-                >
-                  <TouchableOpacity onPress={() => navigation.navigate("DetailBook", product)} style={{ marginRight: 20 }}>
-                    <Text
-                      ellipsizeMode="tail"
-                      numberOfLines={2}
-                      style={{
-                        textAlign: "left",
-                        fontSize: 14,
-                        whiteSpace: "nowrap",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                        lineHeight: 20,
-                        paddingRight: 10,
-                        // marginTop: 10,
-                      }}
-                    >
-                      {/* {props.bookName} */}
-                      {product.name}
-                    </Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity onPress={() => navigation.navigate("DetailBook", product)} style={{ alignItems: "flex-start", marginTop: 6 }}>
-                    <NumericFormat
-                      value={product.price}
-                      displayType={"text"}
-                      // decimalSeparator={'.'}
-                      thousandSeparator={true}
-                      // thousandSeparator={"."}
-                      suffix={" đ"}
-                      renderText={(value) => (
-                        <Text style={{ color: "#DA2424" }}>{value}</Text>
-                      )}
-                    />
-                  </TouchableOpacity>
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                      marginTop: 6,
-                    }}
-                  >
-                    <Text>
-                      Đã bán: <Text>{product.Sold}</Text>
-                    </Text>
-                    <Text>
-                      {product.ratings}
-                      <AntDesign name="star" size={16} color="#fedc00" />
-                    </Text>
-                  </View>
-                </View>
-              </View>
-            ))
-          }
-
-
-        </View>
+                <Text>Clear Favorite</Text>
+              </Pressable>
+            </View>
+          </View>
+        )}
       </SafeAreaView>
     </ScrollView>
-    // </SafeAreaView>
   );
 };
 const styles = StyleSheet.create({
