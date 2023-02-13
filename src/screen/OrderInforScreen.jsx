@@ -28,6 +28,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 import { saveShippingInfo } from "../redux/slice/cartSlice";
 import { creatOrder } from "../redux/slice/newOrderSlice";
+import * as Location from "expo-location";
 
 // import DateTimePicker from '@react-native-community/datetimepicker';
 
@@ -46,13 +47,36 @@ const OrderInforScreen = () => {
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [address, setAddress] = useState("");
+  const [location, setLocation] = useState(null);
   // const [order, setOrder] = useState({});
 
   const orderItem = useSelector((state) => state.cart.cartItems);
   const user = useSelector((state) => state.user.user);
 
   const shippingInfo = useSelector((state) => state.cart.shippingInfo);
+  useEffect(() => {
+    console.log("locationy");
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        console.log("Permission to access location was denied");
+        return;
+      }
 
+      let location = await Location.getCurrentPositionAsync({});
+      console.log("locationyl");
+      setLocation(location);
+    })();
+  }, []);
+
+  const handleLocation = async () => {
+    console.log("curentLocation2", location);
+    const curentLocation = await Location.reverseGeocodeAsync({
+      longitude: location.coords.longitude,
+      latitude: location.coords.latitude,
+    });
+    console.log("curentLoctio", curentLocation);
+  };
   useEffect(() => {
     const fetchPublicProviecs = async () => {
       const response = await apiGetPublicProvinces();
@@ -191,6 +215,12 @@ const OrderInforScreen = () => {
                 keyboardType="numeric"
                 autoCapitalize="none"
               />
+            </View>
+            <View style={{ marginBottom: 14 }}>
+              <Text>
+                Vị trí hiện tại <Text style={{ color: "red" }}>*</Text>
+              </Text>
+              <Button onPress={handleLocation} title="Chọn"></Button>
             </View>
             <View style={{ marginBottom: 14 }}>
               <Text>

@@ -30,6 +30,7 @@ import popularProductsSlice from "./slice/product/popularProductsSlice";
 import cartSlice from "./slice/cartSlice";
 import newOrderSlice from "./slice/newOrderSlice";
 import watchedProduct from "./slice/product/watchedProduct";
+import myOrdersSlice from "./slice/myOrdersSlice";
 
 const persistConfig = {
   key: "root",
@@ -52,6 +53,7 @@ const reducer = combineReducers({
   cart: cartSlice,
   order: newOrderSlice,
   productWatched: watchedProduct,
+  myOrders: myOrdersSlice,
 });
 
 const persistedReducer = persistReducer(persistConfig, reducer);

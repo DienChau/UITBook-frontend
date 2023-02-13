@@ -15,7 +15,11 @@ import Header from "../components/Header";
 import axios from "axios";
 import { Rating } from "react-native-ratings";
 
-import { MaterialIcons, AntDesign } from "@expo/vector-icons";
+import {
+  MaterialIcons,
+  AntDesign,
+  MaterialCommunityIcons,
+} from "@expo/vector-icons";
 import { NumericFormat } from "react-number-format";
 
 import { useNavigation } from "@react-navigation/native";
@@ -91,7 +95,20 @@ const Home = () => {
         <Header />
         {/* <Listbook onPress={addFavoriteHandler} /> */}
         <View style={{ marginTop: 10 }}>
-          <Text style={{ fontSize: 16 }}>Bán chạy nhất</Text>
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <MaterialIcons name="menu-book" size={28} color="#ff9b8a" />
+            <Text
+              style={{
+                fontSize: 18,
+                color: "#1890ff",
+                fontWeight: "800",
+                marginLeft: 3,
+              }}
+            >
+              Phổ biến
+            </Text>
+          </View>
+
           <View
             style={{
               marginTop: 5,
@@ -117,7 +134,23 @@ const Home = () => {
         </ScrollView>
 
         <View style={{ marginTop: 10 }}>
-          <Text style={{ fontSize: 16 }}>Phổ biến</Text>
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <MaterialCommunityIcons
+              name="book-open-page-variant"
+              size={28}
+              color="#ff9b8a"
+            />
+            <Text
+              style={{
+                fontSize: 18,
+                color: "#1890ff",
+                fontWeight: "800",
+                marginLeft: 3,
+              }}
+            >
+              Bán chạy nhất
+            </Text>
+          </View>
           <View
             style={{
               marginTop: 5,

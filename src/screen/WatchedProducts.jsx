@@ -1,12 +1,12 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { Button, ScrollView, Text, View } from "native-base";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Pressable, Image } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import BookHorizontal from "../components/BookHorizontal";
 import { clearWatchedProduct } from "../redux/slice/product/watchedProduct";
-
+import * as SMS from "expo-sms";
 const WatchedProducts = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -15,6 +15,7 @@ const WatchedProducts = () => {
   const handleClear = () => {
     dispatch(clearWatchedProduct());
   };
+
   return (
     <>
       <View bg={"#d5f3f9"} flex={1}>

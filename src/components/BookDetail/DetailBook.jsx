@@ -285,10 +285,9 @@ const DetailBook = ({ route }) => {
                     <Carousel
                       sliderWidth={Dimensions.get("screen").width}
                       sliderHeight={500}
-                      layout={"tinder"}
                       // data={products}
                       data={productBook.images}
-                      itemWidth={Dimensions.get("screen").width}
+                      itemWidth={200}
                       itemHeight={500}
                       renderItem={(item, index) => {
                         // console.log(item.item)
@@ -397,6 +396,29 @@ const DetailBook = ({ route }) => {
                       Tác giả:{" "}
                       <Text style={{ color: "red" }}>{productBook.author}</Text>
                     </Text>
+                  </View>
+                  <View marginTop={3}>
+                    <Pressable
+                      onPress={() =>
+                        navigation.navigate("AudioBook", { productBook })
+                      }
+                      w={"50%"}
+                      padding={2}
+                      flexDirection={"row"}
+                      style={{
+                        alignItems: "center",
+                        justifyContent: "center",
+                        backgroundColor: "#ff5c93",
+                        padding: 3,
+                        width: "40%",
+                        borderRadius: 30,
+                      }}
+                    >
+                      <Ionicons name="md-headset" size={24} color="#fff" />
+                      <Text marginLeft={3} color={"#fff"} fontWeight={"700"}>
+                        Giới thiệu
+                      </Text>
+                    </Pressable>
                   </View>
                 </View>
                 <View
