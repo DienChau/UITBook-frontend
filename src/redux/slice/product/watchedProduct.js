@@ -13,8 +13,8 @@ const watchedProduct = createSlice({
         state.listProduct.push(action.payload);
       }
     },
-    clearWatchedProduct: (stare, action) => {
-      stare.listProduct = [];
+    clearWatchedProduct: (state, action) => {
+      state.listProduct = [];
     },
   },
 });

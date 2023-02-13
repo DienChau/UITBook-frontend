@@ -10,16 +10,16 @@ import {
   Slide,
   Slider,
   Icon,
-  ScrollView,
+  // ScrollView,
 } from "native-base";
-import { Dimensions, TouchableOpacity, Image } from "react-native";
+import { Dimensions, ScrollView, ToastAndroid } from "react-native";
 
 // import products from "../data/Product";
 const windowWidth = Dimensions.get("window").width;
 import { NumericFormat } from "react-number-format";
 import { MaterialIcons, AntDesign } from "@expo/vector-icons";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Header from "./Header";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation, useRoute } from "@react-navigation/native";
@@ -31,6 +31,8 @@ import Book from "./Book";
 import { DataTable } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
 import { getProduct } from "../redux/slice/productsSlice";
+import { addItemsToFavourite } from '../redux/slice/favorites/favouriteSlice'
+
 
 const numberOfItemsPerPageList = [2, 3, 4];
 
@@ -235,269 +237,303 @@ const Books = () => {
   React.useEffect(() => {
     setPage(0);
   }, [numberOfItemsPerPage]);
+
+  const button = useRef();
+
+  function handleAddFavorite(productItem) {
+    dispatch(addItemsToFavourite(productItem));
+    ToastAndroid.show(
+      "Thêm vào yêu thích thành công",
+      ToastAndroid.SHORT
+    );
+    // favorite = true
+    // console.log('Thêm vào yêu thích thành công')
+    // setFavorite(true)
+    // console.log('heart: ', heart)
+    console.log('productItem: ', productItem)
+  }
   return (
     <PaperProvider>
-      <View flex={1} bg="#CBF0F8">
-        <Header />
+      <ScrollView
+        ref={button}
+        onContentSizeChange={() => {
+          button.current.scrollTo({
+            x: 0, // Required
+            y: 0, // Required
+            animated: true,
+          });
+        }}
+        style={{ flex: 1, backgroundColor: "#CBF0F8" }}
+      >
+        <View flex={1} bg="#CBF0F8">
+          <Header />
 
-        <Button
-          onPress={onOpen}
-          w={150}
-          bg="#E8ABC3"
-          marginTop={5}
-          marginLeft={5}
-          padding={2}
-          _text={{
-            fontWeight: "700",
-          }}
-          leftIcon={<Ionicons name="filter" size={24} color="#fff" />}
-        >
-          Lọc sản phẩm
-        </Button>
+          <Button
+            onPress={onOpen}
+            w={150}
+            bg="#E8ABC3"
+            marginTop={5}
+            marginLeft={5}
+            padding={2}
+            _text={{
+              fontWeight: "700",
+            }}
+            leftIcon={<Ionicons name="filter" size={24} color="#fff" />}
+          >
+            Lọc sản phẩm
+          </Button>
 
-        <Divider
-          my="3"
-          _light={{
-            bg: "#fff",
-          }}
-        />
-        <View
-          style={{
-            flexDirection: "row",
-            flexWrap: "wrap",
-            justifyContent: "space-between",
-            marginVertical: 10,
-            paddingHorizontal: 20,
-          }}
-        >
-          {products ? (
-            <>
-              {products.map((product) => (
-                <>
-                  <Book product={product} />
-                </>
-              ))}
-              {products.length === 0 ? (
-                <></>
-              ) : (
-                <>
-                  <DataTable>
-                    <DataTable.Pagination
-                      page={page}
-                      numberOfPages={Math.ceil(
-                        productsCount / numberOfItemsPerPage
-                      )}
-                      onPageChange={(page) => {
-                        // console.log("page:", page);
-                        setPage(page);
-                      }}
-                      showFastPaginationControls
-                      numberOfItemsPerPage={9}
-                      selectPageDropdownLabel={"Rows per page"}
-                    />
-                  </DataTable>
-                </>
-              )}
-            </>
-          ) : (
-            <></>
-          )}
-        </View>
-
-        {/* <FlatList renderItem={() => <Text>HHH</Text>}></FlatList> */}
-
-        <Actionsheet isOpen={isOpen} onClose={onClose}>
-          <Actionsheet.Content>
-            <ScrollView h={700} w="100%">
-              <Box w="100%" px={4} justifyContent="center">
-                <Text
-                  fontSize="20"
-                  color="gray.500"
-                  fontWeight={900}
-                  _dark={{
-                    color: "gray.300",
-                  }}
-                >
-                  Bộ lọc tìm kiếm
-                </Text>
-                <Box marginTop={3} bg="#CBF0F8" rounded={10} padding={5}>
-                  <Text
-                    marginBottom={2}
-                    color="gray.700"
-                    fontSize={18}
-                    fontWeight={700}
-                  >
-                    Thể loại
-                  </Text>
-                  {checkBoxCategory.map((item, index) => {
-                    return (
-                      <RadioButton.Group
-                        onValueChange={(newValue) => {
-                          reserHandler();
-                          setCategory(newValue);
+          <Divider
+            my="3"
+            _light={{
+              bg: "#fff",
+            }}
+          />
+          <View
+            style={{
+              flexDirection: "row",
+              flexWrap: "wrap",
+              justifyContent: "space-between",
+              marginVertical: 10,
+              paddingHorizontal: 20,
+            }}
+          >
+            {products ? (
+              <>
+                {products.map((product, index) => (
+                  // <>
+                  <Book handleAddFavorite={handleAddFavorite} key={index} product={product} />
+                  // </>
+                ))}
+                {products.length === 0 ? (
+                  <></>
+                ) : (
+                  // <>
+                  <View style={{ alignItems: 'center', justifyContent: 'center', paddingLeft: 40 }}>
+                    <DataTable >
+                      <DataTable.Pagination
+                        page={page}
+                        numberOfPages={Math.ceil(
+                          productsCount / numberOfItemsPerPage
+                        )}
+                        onPageChange={(page) => {
+                          // console.log("page:", page);
+                          setPage(page);
                         }}
-                        value={category}
-                      >
-                        <View flexDirection={"row"} alignItems={"center"}>
-                          <RadioButton value={item.title} />
-                          <Text>{item.title}</Text>
-                        </View>
-                      </RadioButton.Group>
-                      // <View
-                      //   marginBottom={2}
-                      //   key={index}
-                      //   style={{ flexDirection: "row" }}
-                      // >
-                      //   <Checkbox
-                      //     value={item.checked}
-                      //     onValueChange={() =>
-                      //       toggleCheckboxCategory(item.id, index)
-                      //     }
-                      //   />
-                      //   <Text marginLeft={3}>{item.title}</Text>
-                      // </View>
-                    );
-                  })}
-                </Box>
-                <Box marginTop={3} bg="#CBF0F8" rounded={10} padding={5}>
-                  <Text
-                    marginBottom={2}
-                    color="gray.700"
-                    fontSize={18}
-                    fontWeight={700}
-                  >
-                    Tác giả
-                  </Text>
-                  {checkBoxAuthor.map((item, index) => {
-                    return (
-                      <RadioButton.Group
-                        onValueChange={(newValue) => {
-                          reserHandler();
-                          setAuthor(newValue);
-                        }}
-                        value={author}
-                      >
-                        <View flexDirection={"row"} alignItems={"center"}>
-                          <RadioButton value={item.title} />
-                          <Text>{item.title}</Text>
-                        </View>
-                      </RadioButton.Group>
-                      // <View
-                      //   marginBottom={2}
-                      //   key={index}
-                      //   style={{ flexDirection: "row" }}
-                      // >
-                      //   <Checkbox
-                      //     value={item.checked}
-                      //     onValueChange={() =>
-                      //       toggleCheckboxAuthor(item.id, index)
-                      //     }
-                      //   />
-                      //   <Text marginLeft={3}>{item.title}</Text>
-                      // </View>
-                    );
-                  })}
-                </Box>
-                <Box marginTop={3} bg="#CBF0F8" rounded={10} padding={5}>
-                  <Text
-                    marginBottom={2}
-                    color="gray.700"
-                    fontSize={18}
-                    fontWeight={700}
-                  >
-                    Nhà xuất bản
-                  </Text>
-                  {checkBoxNXB.map((item, index) => {
-                    return (
-                      <RadioButton.Group
-                        onValueChange={(newValue) => {
-                          reserHandler();
-                          setPublisher(newValue);
-                        }}
-                        value={publisher}
-                      >
-                        <View flexDirection={"row"} alignItems={"center"}>
-                          <RadioButton value={item.title} />
-                          <Text>{item.title}</Text>
-                        </View>
-                      </RadioButton.Group>
-                      // <View
-                      //   marginBottom={2}
-                      //   key={index}
-                      //   style={{ flexDirection: "row" }}
-                      // >
-                      //   <Checkbox
-                      //     value={item.checked}
-                      //     onValueChange={() => toggleCheckboxNXB(item.id, index)}
-                      //   />
-                      //   <Text marginLeft={3}>{item.title}</Text>
-                      // </View>
-                    );
-                  })}
-                </Box>
-
-                <Box marginTop={3} bg="#CBF0F8" rounded={10} padding={5}>
-                  <Text
-                    marginBottom={2}
-                    color="gray.700"
-                    fontSize={18}
-                    fontWeight={700}
-                  >
-                    Giá Sản phẩm
-                  </Text>
-                  <View flexDirection="row" justifyContent="space-between">
-                    <View>
-                      <Text>0</Text>
-                    </View>
-                    <View>
-                      <Text>{price}0. 000</Text>
-                    </View>
-                  </View>
-                  <Slider
-                    defaultValue={price}
-                    size="sm"
-                    colorScheme="green"
-                    w="100%"
-                    step={10}
-                    onChange={(v) => {
-                      // console.log("price", v);
-                      setPrice(v);
-                    }}
-                  >
-                    <Slider.Track bg="green.100">
-                      <Slider.FilledTrack bg="green.600" />
-                    </Slider.Track>
-                    <Slider.Thumb borderWidth="0" bg="transparent">
-                      <Icon
-                        as={MaterialIcons}
-                        name="park"
-                        color="green.600"
-                        size="sm"
+                        showFastPaginationControls
+                        numberOfItemsPerPage={9}
+                        selectPageDropdownLabel={"Rows per page"}
                       />
-                    </Slider.Thumb>
-                  </Slider>
-                </Box>
-                <View alignItems="flex-end">
-                  <Button
-                    w="100"
-                    color="#fff"
-                    marginTop={5}
-                    marginBottom={3}
+                    </DataTable>
+                  </View>
+
+                  // </>
+                )}
+              </>
+            ) : (
+              <></>
+            )}
+          </View>
+
+          {/* <FlatList renderItem={() => <Text>HHH</Text>}></FlatList> */}
+
+          <Actionsheet isOpen={isOpen} onClose={onClose}>
+            <Actionsheet.Content>
+              <ScrollView h={700} w="100%" style={{ height: 700, width: '100%' }}>
+                <Box w="100%" px={4} justifyContent="center">
+                  <Text
+                    fontSize="20"
+                    color="gray.500"
                     fontWeight={900}
-                    _text={{
-                      fontWeight: "900",
+                    _dark={{
+                      color: "gray.300",
                     }}
-                    bg="#E8ABC3"
-                    onPress={handleApply}
                   >
-                    Khôi phục
-                  </Button>
-                </View>
-              </Box>
-            </ScrollView>
-          </Actionsheet.Content>
-        </Actionsheet>
-      </View>
+                    Bộ lọc tìm kiếm
+                  </Text>
+                  <Box marginTop={3} bg="#CBF0F8" rounded={10} padding={5}>
+                    <Text
+                      marginBottom={2}
+                      color="gray.700"
+                      fontSize={18}
+                      fontWeight={700}
+                    >
+                      Thể loại
+                    </Text>
+                    {checkBoxCategory.map((item, index) => {
+                      return (
+                        <RadioButton.Group
+                          key={index}
+                          onValueChange={(newValue) => {
+                            reserHandler();
+                            setCategory(newValue);
+                          }}
+                          value={category}
+                        >
+                          <View flexDirection={"row"} alignItems={"center"}>
+                            <RadioButton value={item.title} />
+                            <Text>{item.title}</Text>
+                          </View>
+                        </RadioButton.Group>
+                        // <View
+                        //   marginBottom={2}
+                        //   key={index}
+                        //   style={{ flexDirection: "row" }}
+                        // >
+                        //   <Checkbox
+                        //     value={item.checked}
+                        //     onValueChange={() =>
+                        //       toggleCheckboxCategory(item.id, index)
+                        //     }
+                        //   />
+                        //   <Text marginLeft={3}>{item.title}</Text>
+                        // </View>
+                      );
+                    })}
+                  </Box>
+                  <Box marginTop={3} bg="#CBF0F8" rounded={10} padding={5}>
+                    <Text
+                      marginBottom={2}
+                      color="gray.700"
+                      fontSize={18}
+                      fontWeight={700}
+                    >
+                      Tác giả
+                    </Text>
+                    {checkBoxAuthor.map((item, index) => {
+                      return (
+                        <RadioButton.Group
+                          key={index}
+                          onValueChange={(newValue) => {
+                            reserHandler();
+                            setAuthor(newValue);
+                          }}
+                          value={author}
+                        >
+                          <View flexDirection={"row"} alignItems={"center"}>
+                            <RadioButton value={item.title} />
+                            <Text>{item.title}</Text>
+                          </View>
+                        </RadioButton.Group>
+                        // <View
+                        //   marginBottom={2}
+                        //   key={index}
+                        //   style={{ flexDirection: "row" }}
+                        // >
+                        //   <Checkbox
+                        //     value={item.checked}
+                        //     onValueChange={() =>
+                        //       toggleCheckboxAuthor(item.id, index)
+                        //     }
+                        //   />
+                        //   <Text marginLeft={3}>{item.title}</Text>
+                        // </View>
+                      );
+                    })}
+                  </Box>
+                  <Box marginTop={3} bg="#CBF0F8" rounded={10} padding={5}>
+                    <Text
+                      marginBottom={2}
+                      color="gray.700"
+                      fontSize={18}
+                      fontWeight={700}
+                    >
+                      Nhà xuất bản
+                    </Text>
+                    {checkBoxNXB.map((item, index) => {
+                      return (
+                        <RadioButton.Group
+                          key={index}
+                          onValueChange={(newValue) => {
+                            reserHandler();
+                            setPublisher(newValue);
+                          }}
+                          value={publisher}
+                        >
+                          <View flexDirection={"row"} alignItems={"center"}>
+                            <RadioButton value={item.title} />
+                            <Text>{item.title}</Text>
+                          </View>
+                        </RadioButton.Group>
+                        // <View
+                        //   marginBottom={2}
+                        //   key={index}
+                        //   style={{ flexDirection: "row" }}
+                        // >
+                        //   <Checkbox
+                        //     value={item.checked}
+                        //     onValueChange={() => toggleCheckboxNXB(item.id, index)}
+                        //   />
+                        //   <Text marginLeft={3}>{item.title}</Text>
+                        // </View>
+                      );
+                    })}
+                  </Box>
+
+                  <Box marginTop={3} bg="#CBF0F8" rounded={10} padding={5}>
+                    <Text
+                      marginBottom={2}
+                      color="gray.700"
+                      fontSize={18}
+                      fontWeight={700}
+                    >
+                      Giá Sản phẩm
+                    </Text>
+                    <View flexDirection="row" justifyContent="space-between">
+                      <View>
+                        <Text>0</Text>
+                      </View>
+                      <View>
+                        <Text>{price}0. 000</Text>
+                      </View>
+                    </View>
+                    <Slider
+                      defaultValue={price}
+                      size="sm"
+                      colorScheme="green"
+                      w="100%"
+                      step={10}
+                      onChange={(v) => {
+                        // console.log("price", v);
+                        setPrice(v);
+                      }}
+                    >
+                      <Slider.Track bg="green.100">
+                        <Slider.FilledTrack bg="green.600" />
+                      </Slider.Track>
+                      <Slider.Thumb borderWidth="0" bg="transparent">
+                        <Icon
+                          as={MaterialIcons}
+                          name="park"
+                          color="green.600"
+                          size="sm"
+                        />
+                      </Slider.Thumb>
+                    </Slider>
+                  </Box>
+                  <View alignItems="flex-end">
+                    <Button
+                      w="100"
+                      color="#fff"
+                      marginTop={5}
+                      marginBottom={3}
+                      fontWeight={900}
+                      _text={{
+                        fontWeight: "900",
+                      }}
+                      bg="#E8ABC3"
+                      onPress={handleApply}
+                    >
+                      Khôi phục
+                    </Button>
+                  </View>
+                </Box>
+              </ScrollView>
+            </Actionsheet.Content>
+          </Actionsheet>
+        </View>
+      </ScrollView>
+
     </PaperProvider>
   );
 };

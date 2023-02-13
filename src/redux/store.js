@@ -30,6 +30,8 @@ import popularProductsSlice from "./slice/product/popularProductsSlice";
 import cartSlice from "./slice/cartSlice";
 import newOrderSlice from "./slice/newOrderSlice";
 import watchedProduct from "./slice/product/watchedProduct";
+// import favouriteSlice from "./features/favourite/favouriteSlice";
+import favouriteSlice from "./slice/favorites/favouriteSlice";
 
 const persistConfig = {
   key: "root",
@@ -39,6 +41,7 @@ const persistConfig = {
 const reducer = combineReducers({
   user: userSlice,
   // products: productsSlice,
+  favourite: favouriteSlice,
   product: productSlice,
   newProduct: newProductSlice,
   newsProducts: newsProductsSlice,
@@ -60,9 +63,13 @@ export const store = configureStore({
   reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
-      serializableCheck: {
-        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-      },
+      immutableCheck: false,
+      serializableCheck: false,
+      // immutableCheck: { warnAfter: 128 },
+      // serializableCheck: {
+      //   ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      //   warnAfter: 128,
+      // },
     }),
 });
 export const persistor = persistStore(store);
