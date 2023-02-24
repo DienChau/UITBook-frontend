@@ -64,7 +64,7 @@ const WatchedProducts = () => {
           ) : (
             <>
               <ScrollView>
-                <View paddingLeft={2} paddingRight={2}>
+                <View paddingLeft={1} paddingRight={1}>
                   {listProduct &&
                     listProduct?.map((item, index) => {
                       return (
@@ -75,12 +75,7 @@ const WatchedProducts = () => {
                     })}
                 </View>
                 <View justifyContent={"center"} alignItems={"center"}>
-                  <Button
-                    marginTop={10}
-                    marginBottom={10}
-                    w={"50%"}
-                    onPress={handleClear}
-                  >
+                  <Button marginTop={10} marginBottom={10} w={"50%"} onPress={handleClear}>
                     Dọn dẹp
                   </Button>
                 </View>
