@@ -26,9 +26,9 @@ import { PersistGate } from "redux-persist/integration/react";
 import Routes from "./Navigations/Routes";
 
 const Stack = createStackNavigator();
-axios.defaults.baseURL = "http://192.168.60.217:5000";
-// axios.defaults.baseURL = "http://192.168.0.110:5000";
-// axios.defaults.baseURL = "http://172.17.9.78:5000";
+// axios.defaults.baseURL = "http://192.168.43.184:5000";
+// axios.defaults.baseURL = "http://172.17.19.99:5000";
+axios.defaults.baseURL = "http://192.168.8.113:5000";
 export default function App() {
   LogBox.ignoreLogs(["Warning:..."]);
   LogBox.ignoreAllLogs();
