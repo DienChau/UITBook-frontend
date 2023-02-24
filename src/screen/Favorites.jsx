@@ -54,9 +54,7 @@ const Favorites = () => {
             style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
           >
             <Image
-              source={{
-                uri: "https://drive.google.com/uc?id=1k2nXiRoCsJ2gKuRmL9FoFwkTgSpW_4n_",
-              }}
+              source={require("../../assets/empty2.gif")}
               style={{ marginTop: 10, width: 400, height: 400 }}
             />
             <Text style={{ marginTop: 10 }}>
@@ -83,18 +81,22 @@ const Favorites = () => {
               <Pressable
                 style={{
                   marginTop: 10,
-                  backgroundColor: "#fecbde",
+                  marginBottom: 10,
+
+                  backgroundColor: "#ff5c93",
                   flex: 1,
                   alignItems: "center",
                   justifyContent: "center",
                   paddingHorizontal: 20,
-                  paddingVertical: 15,
+                  paddingVertical: 10,
 
-                  borderRadius: 10,
+                  borderRadius: 30,
                 }}
                 onPress={() => handleClearFavorite()}
               >
-                <Text>Clear Favorite</Text>
+                <Text style={{ color: "#fff", fontWeight: "800" }}>
+                  Dọn dẹp
+                </Text>
               </Pressable>
             </View>
           </View>

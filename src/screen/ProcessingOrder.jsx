@@ -15,10 +15,10 @@ const ProcessingOrder = () => {
 
   const dispatch = useDispatch();
   const { orders } = useSelector((state) => state.myOrders);
-  const listOrder = orders.filter((item) => {
+  const listOrder = orders?.filter((item) => {
     return item.orderStatus === type;
   });
-  const order = listOrder[0];
+  // const order = listOrder[0];
   // console.log("listOrder", listOrder);
   useEffect(() => {
     dispatch(getMyOrders());
@@ -84,7 +84,7 @@ const ProcessingOrder = () => {
         </View>
 
         <ScrollView>
-          {listOrder.length === 0 ? (
+          {listOrder?.length === 0 ? (
             <>
               <View justifyContent={"center"} alignItems={"center"}>
                 <Image
@@ -96,7 +96,7 @@ const ProcessingOrder = () => {
           ) : (
             <>
               <View flex={1} bg={"#d5f3f9"}>
-                {listOrder.map((item, index) => {
+                {listOrder?.map((item, index) => {
                   return (
                     <View key={index}>
                       <ProcessOrder order={item} />

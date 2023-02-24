@@ -25,29 +25,28 @@ import { useNavigation } from "@react-navigation/native";
 
 import Header from "../components/Header";
 import { Center } from "native-base";
-// import { useDispatch, useSelector } from "react-redux";
-import { logoutRequest } from "../redux/slice/userSlice";
-// import { Button } from "native-base";
+
+import { loadUser, logoutRequest } from "../redux/slice/userSlice";
+
 import { clearWatchedProduct } from "../redux/slice/product/watchedProduct";
 import { useDispatch, useSelector } from "react-redux";
 
-
 const Account = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+
   const { user } = useSelector((state) => state.user);
   const { cartItems } = useSelector((state) => state.cart);
-  console.log("user ", user);
+  console.log("user", user);
+  useEffect(() => {
+    dispatch(loadUser());
+  }, []);
   const [hasGalleryPermission, setHasGalleryPermission] = useState(null);
   const [imageAvatar, setImageAvatar] = useState(
     user
       ? user.avatar.url
       : "https://th.bing.com/th/id/R.b7509f3e22d364dc80a46c3d9da35bff?rik=D%2f44COiUm0HkRg&pid=ImgRaw&r=0"
   );
-  const dispatch = useDispatch();
-
-  // useEffect(() => {
-  //   dispatch(clearWatchedProduct());
-  // }, [])
 
   useEffect(() => {
     (async () => {
@@ -64,8 +63,6 @@ const Account = () => {
       aspect: [4, 3],
       quality: 1,
     });
-
-    console.log(result);
 
     if (!result.canceled) {
       setImageAvatar(result.uri);
@@ -87,8 +84,8 @@ const Account = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* <Header /> */}
-      <View
+      <Header />
+      {/* <View
         style={{
           marginTop: 30,
           justifyContent: "flex-end",
@@ -96,23 +93,7 @@ const Account = () => {
           marginRight: 30,
         }}
       >
-        {/* <Pressable
-                    onPress={() => { navigation.navigate("OrderScreen"); }}
-                    flex={1} justifyContent="center" alignItems="center" marginBottom={10} >
-                    <FontAwesome name="shopping-basket" size={24} color="#888" />
-                    <Box
-                        px={1}
-                        rounded='full'
-                        position='absolute'
-                        top={1}
-                        left={10}
-                        bg={'#E72A2A'}
-                        _text={{
-                            color: '#fff',
-                            fontSize: '11px'
-                        }}
-                    >5</Box>
-                </Pressable> */}
+        
         <Pressable
           onPress={() => {
             navigation.navigate("OrderScreen");
@@ -138,7 +119,7 @@ const Account = () => {
             </>
           ) : null}
         </Pressable>
-      </View>
+      </View> */}
       <ScrollView>
         <View style={{ flex: 3 }}>
           <View
@@ -343,7 +324,6 @@ const Account = () => {
                   marginBottom: 10,
                   paddingVertical: 6,
                 }}
-
               >
                 <View
                   style={{

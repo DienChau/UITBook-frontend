@@ -5,16 +5,12 @@ import {
   Icon,
   Input,
   NativeBaseProvider,
-
   Pressable,
   Stack,
   Text,
   View,
 } from "native-base";
-import {
-  SafeAreaView,
-  KeyboardAvoidingView,
-} from 'react-native'
+import { SafeAreaView, KeyboardAvoidingView } from "react-native";
 // import { NativeBaseConfigProvider } from "native-base/lib/typescript/core/NativeBaseContext";
 import React, { useEffect, useState } from "react";
 import { AntDesign } from "@expo/vector-icons";
@@ -60,7 +56,7 @@ const SignUp = () => {
         "Bạn đã đăng kí thành công vui lòng đăng nhập lại sau 2s",
         ToastAndroid.SHORT
       );
-      // dispatch(clear());
+      dispatch(clear());
       setTimeout(() => {
         navigation.navigate("LogIn");
       }, 2000);
@@ -431,7 +427,6 @@ const SignUp = () => {
             </View>
           </ImageBackground>
         </KeyboardAvoidingView>
-
       </SafeAreaView>
       {/* )} */}
     </>

@@ -31,8 +31,7 @@ import Book from "./Book";
 import { DataTable } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
 import { getProduct } from "../redux/slice/productsSlice";
-import { addItemsToFavourite } from '../redux/slice/favorites/favouriteSlice'
-
+import { addItemsToFavourite } from "../redux/slice/favorites/favouriteSlice";
 
 const numberOfItemsPerPageList = [2, 3, 4];
 
@@ -75,8 +74,9 @@ const Books = () => {
   const routs = useRoute();
 
   let keyword = routs.params;
+  const [search, setSearch] = useState(routs.params);
 
-  // console.log("param", keyword);
+  console.log("param", keyword);
 
   const [checkBoxCategory, setCheckBoxCategory] = useState([
     {
@@ -197,24 +197,32 @@ const Books = () => {
   const [author, setAuthor] = useState();
   const [publisher, setPublisher] = useState();
   const [category, setCategory] = React.useState();
-
-  const reserHandler = (e) => {
+  useEffect(() => {
+    setCategory();
+    setAuthor();
+    setPrice(100);
+    setPublisher();
+    setPage(1);
+    setSearch(keyword);
+  }, [keyword]);
+  const reserHandler = () => {
     setCategory();
     setAuthor();
     setPrice(100);
     setPublisher();
     setPage(1);
     onClose();
-    keyword = "";
+    setSearch("");
   };
   useEffect(() => {
     // console.log("cate:", category);
     // console.log("cate:", author);
     // console.log("cate:", publisher);
+    console.log("search", keyword);
     const initPrice = price * 10000;
-    if (!keyword) keyword = "";
+    if (!search) setSearch("");
     const infoData = {
-      keyword,
+      keyword: search,
       price: [0, initPrice],
       author,
       publisher,
@@ -223,7 +231,7 @@ const Books = () => {
       ratings: 0,
     };
     dispatch(getProduct(infoData));
-  }, [category, author, publisher, price, page, keyword]);
+  }, [category, author, publisher, price, page, search]);
   const handleApply = () => {
     reserHandler();
   };
@@ -242,15 +250,12 @@ const Books = () => {
 
   function handleAddFavorite(productItem) {
     dispatch(addItemsToFavourite(productItem));
-    ToastAndroid.show(
-      "Thêm vào yêu thích thành công",
-      ToastAndroid.SHORT
-    );
+    ToastAndroid.show("Thêm vào yêu thích thành công", ToastAndroid.SHORT);
     // favorite = true
     // console.log('Thêm vào yêu thích thành công')
     // setFavorite(true)
     // console.log('heart: ', heart)
-    console.log('productItem: ', productItem)
+    console.log("productItem: ", productItem);
   }
   return (
     <PaperProvider>
@@ -266,7 +271,7 @@ const Books = () => {
         style={{ flex: 1, backgroundColor: "#CBF0F8" }}
       >
         <View flex={1} bg="#CBF0F8">
-          <Header />
+          {/* <Header /> */}
 
           <Button
             onPress={onOpen}
@@ -302,15 +307,25 @@ const Books = () => {
               <>
                 {products.map((product, index) => (
                   // <>
-                  <Book handleAddFavorite={handleAddFavorite} key={index} product={product} />
+                  <Book
+                    handleAddFavorite={handleAddFavorite}
+                    key={index}
+                    product={product}
+                  />
                   // </>
                 ))}
                 {products.length === 0 ? (
                   <></>
                 ) : (
                   // <>
-                  <View style={{ alignItems: 'center', justifyContent: 'center', paddingLeft: 40 }}>
-                    <DataTable >
+                  <View
+                    style={{
+                      alignItems: "center",
+                      justifyContent: "center",
+                      paddingLeft: 40,
+                    }}
+                  >
+                    <DataTable>
                       <DataTable.Pagination
                         page={page}
                         numberOfPages={Math.ceil(
@@ -339,7 +354,11 @@ const Books = () => {
 
           <Actionsheet isOpen={isOpen} onClose={onClose}>
             <Actionsheet.Content>
-              <ScrollView h={700} w="100%" style={{ height: 700, width: '100%' }}>
+              <ScrollView
+                h={700}
+                w="100%"
+                style={{ height: 700, width: "100%" }}
+              >
                 <Box w="100%" px={4} justifyContent="center">
                   <Text
                     fontSize="20"
@@ -367,6 +386,7 @@ const Books = () => {
                           onValueChange={(newValue) => {
                             reserHandler();
                             setCategory(newValue);
+                            setSearch("");
                           }}
                           value={category}
                         >
@@ -407,6 +427,7 @@ const Books = () => {
                           onValueChange={(newValue) => {
                             reserHandler();
                             setAuthor(newValue);
+                            setSearch("");
                           }}
                           value={author}
                         >
@@ -447,6 +468,7 @@ const Books = () => {
                           onValueChange={(newValue) => {
                             reserHandler();
                             setPublisher(newValue);
+                            setSearch("");
                           }}
                           value={publisher}
                         >
@@ -533,7 +555,6 @@ const Books = () => {
           </Actionsheet>
         </View>
       </ScrollView>
-
     </PaperProvider>
   );
 };

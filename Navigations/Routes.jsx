@@ -15,14 +15,15 @@ import ProcessingOrder from "../src/screen/ProcessingOrder";
 import SignUpScreen from "../src/screen/SignUpScreen";
 import WatchedProducts from "../src/screen/WatchedProducts";
 import WelcomeSreen from "../src/screen/WelcomeSreen";
-import AccountInfor from '../src/screen/AccountInfor'
+import AccountInfor from "../src/screen/AccountInfor";
+import TestAudio from "../src/components/TestAudio";
 
 const Stack = createStackNavigator();
 const Routes = () => {
   const { error, loading, isAuthenticated } = useSelector((state) => {
     return state.user;
   });
-  console.log("Routes", isAuthenticated);
+
   return (
     <NavigationContainer independent={true}>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
@@ -44,6 +45,7 @@ const Routes = () => {
             <Stack.Screen name="AccountInfor" component={AccountInfor} />
             <Stack.Screen name="ProcessingOrder" component={ProcessingOrder} />
             <Stack.Screen name="AudioBook" component={AudioBook} />
+            <Stack.Screen name="TestAudio" component={TestAudio} />
           </>
         ) : (
           <>
