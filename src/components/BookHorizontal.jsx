@@ -12,10 +12,12 @@ import { NumericFormat } from "react-number-format";
 import { AntDesign } from "@expo/vector-icons";
 import { Rating } from "react-native-ratings";
 import { useNavigation } from "@react-navigation/native";
+import { useDispatch } from "react-redux";
+import { addWatchedProduct } from "../redux/slice/product/watchedProduct";
 const windowWidth = Dimensions.get("window").width;
 
 const BookHorizontal = ({ product, handleAddFavorite }) => {
-  console.log('product: ', product)
+  // console.log('product: ', product)
   // const [favoriteIcon, setFavoriteIcon] = useState("favorite-outline");
   // const addFavoriteHandler = () => {
   //   if (favoriteIcon == "favorite-outline") {
@@ -25,13 +27,14 @@ const BookHorizontal = ({ product, handleAddFavorite }) => {
   //   }
   // };
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
-  const [favorite, setFavorite] = useState(false)
+  const [favorite, setFavorite] = useState(false);
   const handleAddFavoriteBook = (product) => {
     handleAddFavorite(product);
-    setFavorite(!favorite)
-    console.log('Has favorite: ', favorite)
-  }
+    setFavorite(!favorite);
+    // console.log('Has favorite: ', favorite)
+  };
   return (
     <>
       {product ? (
@@ -56,21 +59,20 @@ const BookHorizontal = ({ product, handleAddFavorite }) => {
       >
         <MaterialIcons name='favorite-outline' size={26} color={"#E8ABC3"} />
       </TouchableOpacity> */}
-          <Pressable
-            onPress={() => handleAddFavoriteBook(product._id)}
-          >
+          <Pressable onPress={() => handleAddFavoriteBook(product._id)}>
             {favorite ? (
               <AntDesign name="heart" size={24} color="#E8ABC3" />
             ) : (
-              <AntDesign
-                name="hearto"
-                size={24}
-                color="#E8ABC3"
-              />
+              <AntDesign name="hearto" size={24} color="#E8ABC3" />
             )}
           </Pressable>
           <TouchableOpacity
             onPress={() => {
+              dispatch(
+                addWatchedProduct({
+                  ...product,
+                })
+              );
               navigation.navigate("DetailBook", { id: product._id, product });
             }}
             style={{ flexDirection: "row", justifyContent: "center", flex: 4 }}
@@ -110,7 +112,9 @@ const BookHorizontal = ({ product, handleAddFavorite }) => {
               </Text>
               <Text>{product.author}</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={{ alignItems: "flex-start", marginTop: 6 }}>
+            <TouchableOpacity
+              style={{ alignItems: "flex-start", marginTop: 6 }}
+            >
               <NumericFormat
                 value={product.price}
                 displayType={"text"}
@@ -142,7 +146,7 @@ const BookHorizontal = ({ product, handleAddFavorite }) => {
               >
                 Đã bán: <Text>{product.Sold}</Text>
               </Text>
-              <Text style={{ alignItems: 'center' }}>
+              <Text style={{ alignItems: "center" }}>
                 {Math.floor(product.ratings * 10) / 10}
                 <Rating
                   imageSize={15}
@@ -154,9 +158,10 @@ const BookHorizontal = ({ product, handleAddFavorite }) => {
             </View>
           </View>
         </View>
-      ) : (<></>)}
+      ) : (
+        <></>
+      )}
     </>
-
   );
 };
 

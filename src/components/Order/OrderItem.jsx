@@ -51,7 +51,7 @@ const OrderItem = ({ bookItem }) => {
     >
       <View flexDirection={"row"}>
         <Image
-          style={{ height: 100, resizeMode: "stretch", width: 60 }}
+          style={{ height: 100, width: 60 }}
           source={{ uri: bookItem.image }}
         />
         <View marginLeft={3}>

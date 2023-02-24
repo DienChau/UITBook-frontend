@@ -4,7 +4,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { StatusBar } from "expo-status-bar";
 import axios from "axios";
 
-import { StyleSheet, Text, View } from "react-native";
+import { LogBox, StyleSheet, Text, View } from "react-native";
 import Home from "./src/screen/Home";
 import LogIn from "./src/screen/LogIn";
 import { NativeBaseProvider } from "native-base";
@@ -26,10 +26,12 @@ import { PersistGate } from "redux-persist/integration/react";
 import Routes from "./Navigations/Routes";
 
 const Stack = createStackNavigator();
-// axios.defaults.baseURL = "http://192.168.43.184:5000";
+axios.defaults.baseURL = "http://192.168.60.217:5000";
 // axios.defaults.baseURL = "http://192.168.0.110:5000";
-axios.defaults.baseURL = "http://172.17.9.78:5000";
+// axios.defaults.baseURL = "http://172.17.9.78:5000";
 export default function App() {
+  LogBox.ignoreLogs(["Warning:..."]);
+  LogBox.ignoreAllLogs();
   // console.log("Hi");
   // const getMoviesFromApiAsync = async () => {
   //   try {

@@ -7,12 +7,11 @@ import {
   View,
   TouchableOpacity,
   Image,
-  Button,
   Pressable,
   ScrollView,
   ToastAndroid,
 } from "react-native";
-import { FontAwesome5 } from "@expo/vector-icons";
+import { Entypo, FontAwesome5 } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import { RadioButton } from "react-native-paper";
 import { NumericFormat } from "react-number-format";
@@ -29,6 +28,7 @@ import { useNavigation } from "@react-navigation/native";
 import { saveShippingInfo } from "../redux/slice/cartSlice";
 import { creatOrder } from "../redux/slice/newOrderSlice";
 import * as Location from "expo-location";
+import { Button } from "native-base";
 
 // import DateTimePicker from '@react-native-community/datetimepicker';
 
@@ -47,7 +47,7 @@ const OrderInforScreen = () => {
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [address, setAddress] = useState("");
-  const [location, setLocation] = useState(null);
+  const [location, setLocation] = useState();
   // const [order, setOrder] = useState({});
 
   const orderItem = useSelector((state) => state.cart.cartItems);
@@ -60,22 +60,23 @@ const OrderInforScreen = () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {
         console.log("Permission to access location was denied");
+        // setErrorMsg("Permission to access location was denied");
         return;
       }
 
       let location = await Location.getCurrentPositionAsync({});
-      console.log("locationyl");
+      console.log("location", location);
       setLocation(location);
     })();
   }, []);
 
   const handleLocation = async () => {
-    console.log("curentLocation2", location);
+    // console.log("curentLocation2", location);
     const curentLocation = await Location.reverseGeocodeAsync({
-      longitude: location.coords.longitude,
-      latitude: location.coords.latitude,
+      longitude: location?.coords.longitude,
+      latitude: location?.coords.latitude,
     });
-    console.log("curentLoctio", curentLocation);
+    // console.log("curentLoctio", curentLocation);
   };
   useEffect(() => {
     const fetchPublicProviecs = async () => {
@@ -220,7 +221,35 @@ const OrderInforScreen = () => {
               <Text>
                 Vị trí hiện tại <Text style={{ color: "red" }}>*</Text>
               </Text>
-              <Button onPress={handleLocation} title="Chọn"></Button>
+              <Pressable onPress={handleLocation}>
+                <View
+                  style={{
+                    borderRadius: 30,
+                    backgroundColor: "#ff5c93",
+                    alignItems: "center",
+                    width: "30%",
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    paddingVertical: 5,
+                    marginTop: 3,
+                  }}
+                >
+                  <Entypo name="location" size={20} color="#fff" />
+                  <Text
+                    style={{
+                      color: "#fff",
+                      fontWeight: "700",
+                      marginLeft: 5,
+                      fontSize: 16,
+                    }}
+                  >
+                    Chọn
+                  </Text>
+                </View>
+              </Pressable>
+              {/* <Button rounded={20} h={15} onPress={handleLocation}>
+                Chọn
+              </Button> */}
             </View>
             <View style={{ marginBottom: 14 }}>
               <Text>
@@ -349,7 +378,7 @@ const OrderInforScreen = () => {
               hitSlop={{ top: 10, bottom: 10, right: 10, left: 10 }}
               android_ripple={{ color: "#f0f" }}
               style={({ pressed }) => [
-                { backgroundColor: pressed ? "#ddd" : "#E72A2A" },
+                { backgroundColor: pressed ? "#b1e6cc" : "#E72A2A" },
                 styles.button,
                 { alignItems: "center", borderRadius: 10 },
               ]}

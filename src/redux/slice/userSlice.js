@@ -62,6 +62,24 @@ const userSlice = createSlice({
       })
       .addCase(logoutRequest.rejected, (state, action) => {
         state.status = action.payload.success;
+      })
+      .addCase(loadUser.pending, (state, action) => {
+        console.log("pending loaduser");
+        state.loading = true;
+      })
+      .addCase(loadUser.fulfilled, (state, action) => {
+        console.log("fulfilled loaduser");
+        state.loading = false;
+        state.isAuthenticated = true;
+        state.user = action.payload.user;
+        state.error = action.payload.message;
+      })
+      .addCase(loadUser.rejected, (state, action) => {
+        console.log("rejected loaduser");
+        state.loading = false;
+        // state.isAuthenticated = true;
+        // state.user = action.payload.user;
+        state.error = action.payload.message;
       });
   },
 });
@@ -130,6 +148,14 @@ export const logoutRequest = createAsyncThunk(
     return data;
   }
 );
+export const loadUser = createAsyncThunk("user/loadUser", async () => {
+  const data = await axios
+    .get("/api/v2/me", { withCredentials: true })
+    .then((res) => res.data)
+    .catch((err) => err);
+
+  return data;
+});
 
 export const { clear } = userSlice.actions;
 export default userSlice.reducer;

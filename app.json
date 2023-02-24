@@ -7,9 +7,9 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/logo.png",
+      "image": "./assets/BookShop.png",
       "resizeMode": "contain",
-      "backgroundColor": "#CBF0F8"
+      "backgroundColor": "#fff"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -20,12 +20,12 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/logo.png",
+        "foregroundImage": "./assets/BookShop.png",
         "backgroundColor": "#CBF0F8"
       }
     },
     "web": {
-      "favicon": "./assets/logo.png"
+      "favicon": "./assets/BookShop.png"
     },
     "plugins": [
       [

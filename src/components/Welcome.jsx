@@ -1,6 +1,6 @@
 import React from "react";
-import { View, Text } from "react-native";
-import { Box, Button, Image } from "native-base";
+import { View, Text, Image } from "react-native";
+import { Box, Button } from "native-base";
 import logo from "../../assets/logo.png";
 import welcom from "../../assets/Welcome3.png";
 import { useNavigation } from "@react-navigation/native";
@@ -36,14 +36,14 @@ const Welcome = () => {
         }}
         rounded="xl"
       >
-        <Image source={logo} />
+        <Image style={{ width: 200, height: 200 }} source={logo} />
       </Box>
       <Box width="90%" flex={1}>
         <View style={{ alignItems: "center" }}>
           <Image
             source={welcom}
             marginTop={10}
-            style={{ width: 250, resizeMode: "stretch", height: 100 }}
+            style={{ width: 250, height: 100 }}
           />
         </View>
 

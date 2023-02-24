@@ -37,15 +37,19 @@ const AudioBook = () => {
   }, [sound]);
   useEffect(() => {
     async function startSound() {
-      // console.log("Loading Sound");
+      console.log("Loading Sound");
+      // {
+      //   uri: "https://drive.google.com/uc?id=1ZnxkIi4v9yC71EzP3YHCS3MipU65jo11",
+      // }
       const { sound, status } = await Audio.Sound.createAsync(
-        {
-          uri: "https://drive.google.com/uc?id=1ZnxkIi4v9yC71EzP3YHCS3MipU65jo11",
-        },
-        () => {
-          console.log(1);
-        }
+        require("../../assets/music.mp3")
       );
+      sound.setOnPlaybackStatusUpdate((status) => {
+        if (status.isPlaying) {
+          console.log("position", status?.positionMillis);
+          setValueSlider(status?.positionMillis);
+        }
+      });
       // require("../../assets/music.mp3");
       // const a = await sound.getStatusAsync();
       setStatusSound(status);
@@ -60,7 +64,7 @@ const AudioBook = () => {
     setValueSlider(statusSound?.positionMillis);
   }, [statusSound?.positionMillis]);
   const handlePlay = async () => {
-    // console.log("Playing Sound");
+    console.log("Playing Sound");
     await sound.playAsync();
     setPlay(!play);
   };
@@ -205,14 +209,16 @@ const AudioBook = () => {
           >
             <View>
               <Text color={"#fff"}>
-                {statusSound
-                  ? millisToMinutesAndSeconds(statusSound?.durationMillis)
-                  : null}
+                {valueSlider
+                  ? millisToMinutesAndSeconds(valueSlider)
+                  : millisToMinutesAndSeconds(0)}
               </Text>
             </View>
             <View>
               <Text color={"#fff"}>
-                {timeSlider ? timeSlider : millisToMinutesAndSeconds(0)}
+                {statusSound
+                  ? millisToMinutesAndSeconds(statusSound?.durationMillis)
+                  : null}
               </Text>
             </View>
           </View>

@@ -2,7 +2,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { Button, Center, Modal, ScrollView, Text, View } from "native-base";
 import React, { useEffect, useState } from "react";
-import { Image, Pressable, StyleSheet } from "react-native";
+import { Image, Pressable, StyleSheet, ToastAndroid } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { Fontisto } from "@expo/vector-icons";
 // import { Divider } from "react-native-paper";
@@ -12,6 +12,7 @@ import imageSeccuss from "../../assets/success.gif";
 import { clearOrder, creatOrder } from "../redux/slice/newOrderSlice";
 import Loading from "../components/Loading";
 import { clearCartItem } from "../redux/slice/cartSlice";
+import { Toast } from "react-native-toast-message/lib/src/Toast";
 
 const FinalOrderScreen = () => {
   const dispatch = useDispatch();
@@ -20,18 +21,20 @@ const FinalOrderScreen = () => {
   const [order, setOrder] = useState({});
 
   const navigation = useNavigation();
-  const { loading, success } = useSelector((state) => state.order);
+  const { loading, success, error } = useSelector((state) => state.order);
 
   const { cartItems, shippingInfo } = useSelector((state) => state.cart);
-  // const orderItem = useSelector((state) => state.cart.cartItems);
+
   const user = useSelector((state) => state.user.user);
-  // useEffect(() => {
-  //   dispatch(clearOrder());
-  // }, []);
+
   useEffect(() => {
-    console.log("success", success);
+    console.log("success1", success);
     if (success) {
       dispatch(clearCartItem());
+      dispatch(clearOrder());
+    }
+    if (error) {
+      ToastAndroid.show(`${error}`, ToastAndroid.LONG);
     }
   }, [success]);
   useEffect(() => {
